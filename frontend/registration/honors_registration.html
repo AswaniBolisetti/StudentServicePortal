@@ -5,159 +5,226 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Honors Registration</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
+      background-color: #f4f4f9;
     }
 
-    #honorsForm {
-      display: none;
-      margin-top: 20px;
+    .top-right-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
     }
 
-    label {
-      display: block;
-      margin-bottom: 8px;
+    .profile-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 40px;
+  left: -360%; /* Position to the left of the profile icon */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+
+  .dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: #f1f1f1;
+  }
+
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 500px;
+      margin: 100px auto;
+      text-align: center;
     }
 
-    input,
-    select,
-    button {
-      padding: 10px;
+    .card h1 {
       margin-bottom: 15px;
-      width: 100%;
-      max-width: 400px;
-      box-sizing: border-box;
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    .card p {
+      margin-bottom: 20px;
+      color: #555;
     }
 
     button {
       background-color: #4CAF50;
       color: white;
       border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
       cursor: pointer;
+      text-decoration: none;
     }
 
     button:hover {
       background-color: #45a049;
     }
+    .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+    justify-content: center; /* Center content */
+    align-items: center; /* Center content vertically */
+  }
 
-    .form-section {
-      margin-bottom: 20px;
-    }
+  .modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Adjust modal width */
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-header,
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .close:hover {
+    color: #ff0000;
+  }
   </style>
 </head>
 
 <body>
-  <h1>Honors Registration</h1>
-  <p>Click the button below to register for honors.</p>
-  <button id="openFormButton">Register for Honors</button>
-
-  <form id="honorsForm">
-    <h2>Honors Registration Form</h2>
-
-    <div class="form-section">
-      <label for="rollNumber">Roll Number:</label>
-      <input type="text" id="rollNumber" name="rollNumber" placeholder="Enter your roll number" required>
+  <!-- Profile Icon with Dropdown -->
+  <div class="top-right-button">
+    <div class="profile-dropdown">
+      <i class="fas fa-user-circle fa-2x" id="profileIcon"></i>
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html" id="viewProfile">View Profile</a>
+        <a href="#" id="viewRegisteredCourses">Registered Courses</a>
+        <a href="#" id="logout">Logout</a>
+      </div>
     </div>
+  </div>
+  
 
-    <div class="form-section">
-      <label for="year">Current year:</label>
-      <select id="year" name="year" required>
-        <option value="">Select year</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
+  <div class="card">
+    <h1>Honors Registration</h1>
+    <p>Click the button below to register for honors.</p>
+    <a href="./main_honors_reg.html">
+      <button>Register for Honors</button>
+    </a>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="coursesModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Registered Courses</h5>
+        <span class="close" id="closeModal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p>List of registered courses goes here...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalFooter">Close</button>
+      </div>
     </div>
-
-    <div class="form-section">
-      <label for="sem">Current semester:</label>
-      <select id="sem" name="sem" required>
-        <option value="">Select semester</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-      </select>
-    </div>
-
-    <div class="form-section">
-      <label for="avgscore">Average Score (0-100):</label>
-      <input type="number" id="avgscore" name="avgscore" placeholder="Enter your average score" required>
-    </div>
-
-    <div class="form-section">
-      <label for="course">Select Course:</label>
-      <select id="course" name="course" required>
-        <option value="">Select course</option>
-        <option value="Cloud Computing">Cloud Computing</option>
-        <option value="Information Security">Information Security</option>
-      </select>
-    </div>
-
-    <button type="submit">Submit</button>
-  </form>
+  </div>
+  
 
   <script>
-    document.getElementById('openFormButton').addEventListener('click', () => {
-      document.getElementById('honorsForm').style.display = 'block';
-      document.getElementById('openFormButton').style.display = 'none';
-    });
+    const modal = document.getElementById('coursesModal');
+    const viewRegisteredCourses = document.getElementById('viewRegisteredCourses');
+    const closeModal = document.getElementById('closeModal');
+    const closeModalFooter = document.getElementById('closeModalFooter');
+    const profileIcon = document.getElementById("profileIcon");
+  const dropdownMenu = document.getElementById("dropdownMenu");
 
-    document.getElementById('honorsForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
+  // Toggle dropdown visibility on icon click
+  profileIcon.addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevent click from propagating to the document
+    dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+  });
 
-      const rollNumber = document.getElementById('rollNumber').value.trim();
-      const year = document.getElementById('year').value;
-      const sem = document.getElementById('sem').value;
-      const avgscore = parseFloat(document.getElementById('avgscore').value);
-      const course = document.getElementById('course').value;
+  // Hide the dropdown if clicking outside of it
+  document.addEventListener("click", (e) => {
+    if (!dropdownMenu.contains(e.target) && e.target !== profileIcon) {
+      dropdownMenu.style.display = "none";
+    }
+  });
+    // Show modal when 'Registered Courses' is clicked
+    viewRegisteredCourses.onclick = function (e) {
+      e.preventDefault();
+      modal.style.display = "flex";
+    };
 
-      if (!rollNumber || !year || !sem || isNaN(avgscore) || !course) {
-        alert('All fields are required.');
-        return;
+    // Close modal when the close button (X) is clicked
+    closeModal.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // Close modal when the close button in footer is clicked
+    closeModalFooter.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // Close modal if clicked outside the modal content
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
       }
+    };
+    // Add event listener to the "Logout" link
+document.getElementById('logout').addEventListener('click', function (e) {
+  e.preventDefault();  // Prevent the default action (navigation)
+  
+  // Remove the current user from session storage
+  sessionStorage.removeItem('userRollNumber');
+  
+  // Redirect to registration.html
+  window.location.href = 'registration.html';
+});
 
-      if (avgscore <= 70) {
-        alert('Not eligible for honors registration. Average score must be greater than 70.');
-        return;
-      }
-      const token = sessionStorage.getItem('userToken'); 
-      
-
-      try {
-        const response = await axios.post('http://localhost:3000/registerHonors', {
-          rollNumber,
-          year,
-          sem,
-          avgscore
-        }, {
-      headers: {
-        Authorization: `Bearer ${token}` // Pass the token in the Authorization header
-      }
-      });
-
-        if (response.status === 200) {
-          alert('Honors Registration Submitted Successfully!');
-          document.getElementById('honorsForm').reset();
-          document.getElementById('honorsForm').style.display = 'none';
-          document.getElementById('openFormButton').style.display = 'block';
-        }
-      } catch (error) {
-        console.error('Error during registration:', error);
-        alert('Something went wrong. Please try again later.');
-      }
-    });
   </script>
 
-  <!-- Include Axios -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 
 </html>

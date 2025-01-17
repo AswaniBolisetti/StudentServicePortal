@@ -10,12 +10,25 @@
 </head>
 
 <body>
-  <h1>Welcome</h1>
+  <h1>Welcome to Student Service Portal</h1>
 
   <!-- Buttons to toggle between Create Profile and Login -->
-  <button id="createProfileButton">Create Profile</button>
-  <button id="loginButton">Login</button>
+  <button id="studentLoginButton">Student Login</button>
+  <button id="adminLoginButton">Admin Login</button>
+<br>
+<br>
 
+  <!-- Buttons to toggle between Create Profile and Login (hidden by default) -->
+  <div id="studentOptions" style="display: none;">
+    <button id="createProfileButton">Create Student Profile</button>
+    <button id="loginButton">Student Login</button>
+  </div>
+ 
+  <div id="adminOptions" style="display: none;">
+    <button id="adminFeature1">Create Admin Profile</button>
+    <button id="adminFeature2">Admin Login</button>
+  </div>
+  
   <!-- Registration Form (hidden by default) -->
   <div id="registrationSection" style="display: none;">
     <h2>Create Profile</h2>
@@ -88,6 +101,12 @@
 
   <script>
     // Toggle between Create Profile and Login sections
+    document.getElementById('studentLoginButton').addEventListener('click', () => {
+      document.getElementById('studentOptions').style.display = 'block';
+      document.getElementById('adminOptions').style.display = 'none';
+    });
+
+    // Create Profile and Login button functionality
     document.getElementById('createProfileButton').addEventListener('click', () => {
       document.getElementById('registrationSection').style.display = 'block';
       document.getElementById('loginSection').style.display = 'none';
@@ -98,6 +117,13 @@
       document.getElementById('registrationSection').style.display = 'none';
     });
 
+    // Admin Login button functionality (no action for now)
+    document.getElementById('adminLoginButton').addEventListener('click', () => {
+      document.getElementById('studentOptions').style.display = 'none';
+      document.getElementById('adminOptions').style.display = 'block';
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('registrationSection').style.display = 'none';
+    });
     let fetchedEmail = '';
 
     // Google Sign-In callback function
@@ -220,6 +246,8 @@
         if (response.data.token) {
           // Save the token as userToken in sessionStorage
           sessionStorage.setItem('userToken', response.data.token);
+          sessionStorage.setItem('userRollNumber', rollNumber);
+          // sessionStorage.setItem('userEmail', response.data.email);
 
           // Optionally, redirect the user or update the UI
           alert('Login successful');

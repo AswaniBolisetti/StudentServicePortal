@@ -55,6 +55,25 @@ app.get('/users', (req, res) => {
   });
 });
 
+// `http://localhost:3000/students/${rollNumber}`
+
+app.post('/students/:rollNumber', (req, res) => {
+  const rollNumber = req.params.rollNumber;
+  const query = 'SELECT * FROM students WHERE rollNo = ?'; // Check if roll_number column exists
+
+  db.query(query, [rollNumber], (err, results) => {
+    if (err) {
+      console.error('Error fetching user data: ' + err.stack);
+      return res.status(500).send('Error fetching user');
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send('User not found');
+    }
+    
+    return res.status(200).json(results[0]); // Send the first matching user
+  });
+});
 
 app.get('/users/:rollNumber', (req, res) => {
   const rollNumber = req.params.rollNumber;
