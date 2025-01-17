@@ -128,8 +128,8 @@
         alert('Not eligible for honors registration. Average score must be greater than 70.');
         return;
       }
-      const token = sessionStorage.getItem('userToken');
-
+      const token = sessionStorage.getItem('userToken'); 
+      
 
       try {
         const response = await axios.post('http://localhost:3000/registerHonors', {
