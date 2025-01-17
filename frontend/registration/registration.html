@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration and Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+  <h1>Welcome</h1>
+
+  <!-- Buttons to toggle between Create Profile and Login -->
+  <button id="createProfileButton">Create Profile</button>
+  <button id="loginButton">Login</button>
+
+  <!-- Registration Form (hidden by default) -->
+  <div id="registrationSection" style="display: none;">
+    <h2>Create Profile</h2>
+    <form id="registrationForm">
+      <label for="rollNumber">Roll Number:</label>
+      <input type="text" id="rollNumber" name="rollNumber" required>
+      <button type="button" id="checkButton">Check</button>
+      <br><br>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" readonly>
+      <br><br>
+
+      <!-- Sign-in section, initially hidden -->
+      <div class="Signin-section" style="display: none;">
+        <p>To verify, Sign-In with the same email address</p>
+        <div id="g_id_onload" data-client_id="543677223710-im5qe7km6rtfp8mvk7fv48rtqv7gesgm.apps.googleusercontent.com"
+          data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin" data-type="standard"></div>
+      </div>
+
+      <!-- Verification status message, initially hidden -->
+      <div id="verificationStatus" style="display: none;">
+        <p>Verification is completed.</p>
+      </div>
+
+      <!-- Additional fields for profile creation -->
+      <div id="profileFields" style="display: none;">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" required>
+        <br><br>
+
+        <label for="department">Department:</label>
+        <input type="text" id="department" name="department" required>
+        <br><br>
+
+        <label for="mobile_no">Mobile No:</label>
+        <input type="number" id="mobile_no" name="mobile_no" required>
+        <br><br>
+
+        <label for="password">Set Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <br><br>
+
+        <button type="submit">Create Profile</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Login Form (hidden by default) -->
+  <div id="loginSection" style="display: none;">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="loginRollNumber">Roll Number:</label>
+      <input type="text" id="loginRollNumber" name="loginRollNumber" required>
+      <br><br>
+
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" name="loginPassword" required>
+      <br><br>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    // Toggle between Create Profile and Login sections
+    document.getElementById('createProfileButton').addEventListener('click', () => {
+      document.getElementById('registrationSection').style.display = 'block';
+      document.getElementById('loginSection').style.display = 'none';
+    });
+
+    document.getElementById('loginButton').addEventListener('click', () => {
+      document.getElementById('loginSection').style.display = 'block';
+      document.getElementById('registrationSection').style.display = 'none';
+    });
+
+    let fetchedEmail = '';
+
+    // Google Sign-In callback function
+    function handleCredentialResponse(response) {
+      const token = response.credential;
+      console.log("token is " + token)
+      const payload = JSON.parse(atob(token.split('.')[1]));
+
+
+      const googleEmail = payload.email;
+
+      if (googleEmail === fetchedEmail) {
+        alert('Sign-in successful!');
+        document.querySelector('.Signin-section').style.display = 'none';
+        document.getElementById('verificationStatus').style.display = 'block';
+        document.getElementById('profileFields').style.display = 'block';
+        sessionStorage.setItem('googleToken', token);
+
+      } else {
+        alert('Email does not match. Please sign in with the same email.');
+      }
+    }
+
+    // Check button handler
+    document.getElementById('checkButton').addEventListener('click', async () => {
+      const rollNumber = document.getElementById('rollNumber').value;
+
+      if (!rollNumber) {
+        alert('Please enter a roll number.');
+        return;
+      }
+
+      try {
+        const response = await axios.get(`http://localhost:3000/users/${rollNumber}`);
+        const user = response.data;
+
+        if (user && user.email) {
+          fetchedEmail = user.email;
+          document.getElementById('email').value = user.email;
+          alert('User data fetched successfully.');
+          document.querySelector('.Signin-section').style.display = 'block';
+        }
+      } catch (error) {
+        alert('No user found or an error occurred.');
+      }
+    });
+
+    // Registration form submission
+    // Registration form submission
+    document.getElementById('registrationForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const fullName = document.getElementById('fullName').value.trim();
+      const rollNumber = document.getElementById('rollNumber').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const department = document.getElementById('department').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const mobileNumber = parseInt(document.getElementById('mobile_no').value);
+
+      if (!fullName || !rollNumber || !email || !department || !password || !confirmPassword || isNaN(mobileNumber)) {
+        alert('All fields are required.');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      const googleToken = sessionStorage.getItem('googleToken');
+
+      if (!googleToken) {
+        alert('Google token not found. Please sign in again.');
+        return;
+      }
+
+      try {
+        const response = await axios.post('http://localhost:3000/insertStudent', {
+          name: fullName,
+          rollNo: rollNumber,
+          email: email,
+          mobileNumber: mobileNumber,
+          department: department,
+          password: password
+        }, {
+          headers: {
+            Authorization: `Bearer ${googleToken}` // Pass the token in the Authorization header
+          }
+        });
+
+        // Display success message
+        alert('Profile Created Successfully!, Login to proceed');
+
+        // Reset the registration form
+        document.getElementById('registrationForm').reset();
+        document.getElementById('profileFields').style.display = 'none';
+
+        // Show login section
+        document.getElementById('registrationSection').style.display = 'none';
+        document.getElementById('loginSection').style.display = 'block';
+
+      } catch (error) {
+        console.log(error)
+        alert("Something went wrong or user already exists.");
+      }
+    });
+
+    // Login form submission
+    document.getElementById('loginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const rollNumber = document.getElementById('loginRollNumber').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const response = await axios.post('http://localhost:3000/loginStudent', {
+          username: rollNumber,
+          password: password
+        });
+
+        if (response.data.token) {
+          // Save the token as userToken in sessionStorage
+          sessionStorage.setItem('userToken', response.data.token);
+
+          // Optionally, redirect the user or update the UI
+          alert('Login successful');
+          // Redirect to another page or update the UI here
+        } else {
+          alert('Invalid username or password');
+        }
+        window.location.href = 'honors_registration.html';
+      } catch (error) {
+        alert('Invalid Username and Password');
+      }
+    });
+  </script>
+</body>
+
+</html>

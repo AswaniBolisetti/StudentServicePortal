@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Honors Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    #honorsForm {
+      display: none;
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input,
+    select,
+    button {
+      padding: 10px;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .form-section {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Honors Registration</h1>
+  <p>Click the button below to register for honors.</p>
+  <button id="openFormButton">Register for Honors</button>
+
+  <form id="honorsForm">
+    <h2>Honors Registration Form</h2>
+
+    <div class="form-section">
+      <label for="rollNumber">Roll Number:</label>
+      <input type="text" id="rollNumber" name="rollNumber" placeholder="Enter your roll number" required>
+    </div>
+
+    <div class="form-section">
+      <label for="year">Current year:</label>
+      <select id="year" name="year" required>
+        <option value="">Select year</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </div>
+
+    <div class="form-section">
+      <label for="sem">Current semester:</label>
+      <select id="sem" name="sem" required>
+        <option value="">Select semester</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </select>
+    </div>
+
+    <div class="form-section">
+      <label for="avgscore">Average Score (0-100):</label>
+      <input type="number" id="avgscore" name="avgscore" placeholder="Enter your average score" required>
+    </div>
+
+    <div class="form-section">
+      <label for="course">Select Course:</label>
+      <select id="course" name="course" required>
+        <option value="">Select course</option>
+        <option value="Cloud Computing">Cloud Computing</option>
+        <option value="Information Security">Information Security</option>
+      </select>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById('openFormButton').addEventListener('click', () => {
+      document.getElementById('honorsForm').style.display = 'block';
+      document.getElementById('openFormButton').style.display = 'none';
+    });
+
+    document.getElementById('honorsForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const rollNumber = document.getElementById('rollNumber').value.trim();
+      const year = document.getElementById('year').value;
+      const sem = document.getElementById('sem').value;
+      const avgscore = parseFloat(document.getElementById('avgscore').value);
+      const course = document.getElementById('course').value;
+
+      if (!rollNumber || !year || !sem || isNaN(avgscore) || !course) {
+        alert('All fields are required.');
+        return;
+      }
+
+      if (avgscore <= 70) {
+        alert('Not eligible for honors registration. Average score must be greater than 70.');
+        return;
+      }
+      const token = sessionStorage.getItem('userToken');
+
+
+      try {
+        const response = await axios.post('http://localhost:3000/registerHonors', {
+          rollNumber,
+          year,
+          sem,
+          avgscore
+        }, {
+      headers: {
+        Authorization: `Bearer ${token}` // Pass the token in the Authorization header
+      }
+      });
+
+        if (response.status === 200) {
+          alert('Honors Registration Submitted Successfully!');
+          document.getElementById('honorsForm').reset();
+          document.getElementById('honorsForm').style.display = 'none';
+          document.getElementById('openFormButton').style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error during registration:', error);
+        alert('Something went wrong. Please try again later.');
+      }
+    });
+  </script>
+
+  <!-- Include Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+
+</html>
