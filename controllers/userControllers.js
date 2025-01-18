@@ -13,7 +13,7 @@ const db = mysql.createConnection({
 exports.insertUsersFromExcel = async (req, res) => {
   try {
     // Path to your Excel file
-    const filePath = "C:/rollno_vs_email.xlsx";
+    const filePath = "C:/Users/Bolisetti Aswani/Desktop/HonorsRegistration/controllers/rollno_vs_email.xlsx";
 
     // Read the Excel file
     const workbook = XLSX.readFile(filePath);

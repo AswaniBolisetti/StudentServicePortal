@@ -47,7 +47,6 @@ const db = mysql.createConnection({
   database: 'honors_registration' // Your MySQL database name
 });
 
-
 function verifyToken(req, res) {
     const token = req.headers.authorization?.split(" ")[1]; // Extract the token from the Authorization header
   
@@ -58,26 +57,26 @@ function verifyToken(req, res) {
     try {
       // Verify and decode the token
       const { rollNumber} = req.body;
-        const secretKey = rollNumber; // Same password used during token generation
-        console.log("token is "+token);
+      const secretKey = rollNumber; // Same password used during token generation
+      console.log("token is "+token);
 
       const decoded = jwt.verify(token, secretKey);
   
       // Cross-check the username
       const usernameFromToken = decoded.username;
-  console.log("token usernameFromToken "+usernameFromToken);
-  console.log("token rollNumber "+rollNumber);
+      console.log("token usernameFromToken "+usernameFromToken);
+      console.log("token rollNumber "+rollNumber);
         
     } catch (error) {
       return res.status(401).json({ error: "Invalid or expired token" });
     }
-  }
+}
   
-
-
+// Controller to insert honors registration data
 // Controller to insert honors registration data
 exports.registerHonors = async (req, res) => {
-  const { rollNumber, year, sem, avgscore } = req.body;
+  const { rollNumber, year, sem, avgscore, course } = req.body;
+  console.log(rollNumber, year, sem, avgscore);
 
   // Check if all required fields are present
   if (!rollNumber || !year || !sem || !avgscore) {
@@ -89,44 +88,63 @@ exports.registerHonors = async (req, res) => {
     return res.status(400).json({ message: 'Not eligible for honors registration. Average score must be greater than 70.' });
   }
 
-//   const { authorization } = req.headers;
-//   const googleToken = authorization.split(' ')[1]; 
+  const defaultCourse = ['21CS01'];
+  const courseToInsert = (course && Array.isArray(course)) ? course : defaultCourse;
 
-//   if (!googleToken) {
-//     return res.status(400).json({ message: 'Token is required' });
-//   }
-
-  // Verify the Google token
-//   const verifiedEmail = await verifyGoogleToken(googleToken, req.body.email);
-
-  // If verification failed (email mismatch or invalid token)
-//   if (verifiedEmail.error) {
-//     return res.status(400).json({ message: verifiedEmail.error });
-//   }
-
-  // Insert the honors registration details into the database
-
-
-
-//---------------------------------
-
-
-
-
-// Middleware or API logic to verify the token and cross-check the username
- const tokenVerificationResult = verifyToken(req, res);
+  const tokenVerificationResult = verifyToken(req, res);
   if (tokenVerificationResult) {
-    return tokenVerificationResult; // Exit early if token verification failed
+    return tokenVerificationResult;
   }
 
-//--------------------
-  const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, avg_score, course_id) VALUES (?, ?, ?, ?, ?)';
-  db.query(insertHonorsQuery, [rollNumber, year, sem, avgscore, 2], (err, results) => {
+  // Check if the student already has a registration
+  const checkExistingStudentQuery = 'SELECT * FROM registrations WHERE student_id = ?';
+  db.query(checkExistingStudentQuery, [rollNumber], (err, results) => {
     if (err) {
-      console.error('Error inserting honors registration data:', err);
-      return res.status(500).json({ message: 'Error inserting honors registration data' });
+      console.error('Error checking existing registration:', err);
+      return res.status(500).json({ message: 'Error checking existing registration' });
     }
 
-    return res.status(200).json({ message: 'Honors registration successful' });
+    if (results.length > 0) {
+      // Student exists
+      console.log("Already registeredd")
+      return res.status(404).json({ message: 'Already registered' });
+      let existingCourses;
+      try {
+        existingCourses = JSON.parse(results[0].course_id); // Attempt to parse as JSON
+        if (!Array.isArray(existingCourses)) {
+          throw new Error('Course data is not an array');
+        }
+      } catch (parseError) {
+        // Handle non-JSON or invalid JSON by treating it as a plain string
+        existingCourses = [results[0].course_id];
+      }
+
+      const updatedCourses = [...new Set([...existingCourses, ...courseToInsert])]; // Remove duplicates
+
+      // Update the course_id field
+      const updateCoursesQuery = 'UPDATE registrations SET course_id = ? WHERE student_id = ?';
+      db.query(updateCoursesQuery, [JSON.stringify(updatedCourses), rollNumber], (err, updateResults) => {
+        if (err) {
+          console.error('Error updating courses:', err);
+          return res.status(500).json({ message: 'Error updating courses' });
+        }
+
+        return res.status(200).json({ message: 'Course registration updated successfully' });
+      });
+    } else {
+      // Student doesn't exist
+      
+      const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, avg_score, course_id) VALUES (?, ?, ?, ?, ?)';
+      db.query(insertHonorsQuery, [rollNumber, year, sem, avgscore, JSON.stringify(courseToInsert)], (err, insertResults) => {
+        if (err) {
+          console.error('Error inserting honors registration data:', err);
+          return res.status(500).json({ message: 'Error inserting honors registration data' });
+        }
+
+        return res.status(200).json({ message: 'Honors registration successful' });
+      });
+    }
   });
 };
+
+

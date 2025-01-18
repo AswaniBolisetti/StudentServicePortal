@@ -37,10 +37,142 @@
       margin: 10px 0;
       color: #555;
     }
+    .top-right-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .profile-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 40px;
+  left: -360%; /* Position to the left of the profile icon */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+
+  .dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: #f1f1f1;
+  } button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+    .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+    justify-content: center; /* Center content */
+    align-items: center; /* Center content vertically */
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Adjust modal width */
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-header,
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .close:hover {
+    color: #ff0000;
+  } .back-to-home {
+    position: absolute;
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+  }
+
+  .back-to-home:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
   </style>
 </head>
 <body>
-    
+  <div class="top-right-button">
+    <div class="profile-dropdown">
+      <i class="fas fa-user-circle fa-2x" id="profileIcon"></i>
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html" id="viewProfile">View Profile</a>
+        <a href="#" id="viewRegisteredCourses">Registered Courses</a>
+        <a href="#" id="logout">Logout</a>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="coursesModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Registered Courses</h5>
+        <span class="close" id="closeModal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p>List of registered courses goes here...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalFooter">Close</button>
+      </div>
+    </div>
+  </div>
+  
+  <button onclick="goToHome()">
+    <i class="fas fa-arrow-left"></i> Back to Home
+  </button>
+
   <div class="profile-card">
     <!-- Profile Picture -->
     <!-- <img id="profile-pic" src="https://via.placeholder.com/150" alt="Profile Picture"> -->
@@ -50,7 +182,7 @@
     <p><strong>Email:</strong> <span id="email">N/A</span></p>
     <p><strong>Department:</strong> <span id="department">N/A</span></p>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     const token = sessionStorage.getItem('userToken');
@@ -86,6 +218,61 @@
     }
 
     fetchUserDetails();
+
+    const modal = document.getElementById('coursesModal');
+    const viewRegisteredCourses = document.getElementById('viewRegisteredCourses');
+    const closeModal = document.getElementById('closeModal');
+    const closeModalFooter = document.getElementById('closeModalFooter');
+    const profileIcon = document.getElementById("profileIcon");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+
+  // Toggle dropdown visibility on icon click
+  profileIcon.addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevent click from propagating to the document
+    dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+  });
+
+  // Hide the dropdown if clicking outside of it
+  document.addEventListener("click", (e) => {
+    if (!dropdownMenu.contains(e.target) && e.target !== profileIcon) {
+      dropdownMenu.style.display = "none";
+    }
+  });
+    // Show modal when 'Registered Courses' is clicked
+    viewRegisteredCourses.onclick = function (e) {
+      e.preventDefault();
+      modal.style.display = "flex";
+    };
+
+    // Close modal when the close button (X) is clicked
+    closeModal.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // Close modal when the close button in footer is clicked
+    closeModalFooter.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // Close modal if clicked outside the modal content
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+    // Add event listener to the "Logout" link
+document.getElementById('logout').addEventListener('click', function (e) {
+  e.preventDefault();  // Prevent the default action (navigation)
+  
+  // Remove the current user from session storage
+  sessionStorage.removeItem('userRollNumber');
+  
+  // Redirect to registration.html
+  window.location.href = 'registration.html';
+});
+function goToHome() {
+    window.location.href = 'honors_registration.html';
+  }
   </script>
 </body>
 </html>

@@ -7,6 +7,12 @@ const userController = require('./controllers/userControllers');
 const studentController = require('./controllers/studentController');
 const loginController = require('./controllers/loginController');
 const honorsRegController = require('./controllers/honorsRegController');
+const adminController = require('./controllers/adminController');
+const registrationController = require('./controllers/checkRegController');
+const courseController = require('./controllers/courseController');
+const viewCoursesController = require('./controllers/viewCoursesController');
+const deleteCourseController = require('./controllers/deleteCourseController');
+
 const cors = require('cors');
 // Route to insert users from Excel file
 
@@ -36,8 +42,11 @@ db.connect((err) => {
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-
-
+app.post('/viewcourses', viewCoursesController.viewCoursesController)
+app.post('/addcourse', courseController.insertCourse);
+app.delete('/deletecourse/${courseId}', deleteCourseController.deleteCourse);
+app.get('/registrations/:rollNumber', registrationController.checkRegistrationStatus);
+app.post('/adminLogin', adminController.adminLogin);
 app.post('/registerHonors', honorsRegController.registerHonors);
 app.post('/insertStudent', studentController.insertStudent);
 app.get('/upload-users', userController.insertUsersFromExcel);

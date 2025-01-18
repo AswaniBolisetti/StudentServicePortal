@@ -145,9 +145,7 @@
   <div class="card">
     <h1>Honors Registration</h1>
     <p>Click the button below to register for honors.</p>
-    <a href="./main_honors_reg.html">
-      <button>Register for Honors</button>
-    </a>
+    <button id="registerButton">Register for Honors</button>
   </div>
 
   <!-- Modal -->
@@ -168,6 +166,29 @@
   
 
   <script>
+    const rollNumber = sessionStorage.getItem('userRollNumber');
+    if (!rollNumber) {
+      window.location.href = './registration.html';
+     
+    }
+
+    const registerButton = document.getElementById('registerButton');
+    registerButton.addEventListener('click', async () => {
+      try {
+        // Fetch the student registration status using axios
+        const response = await axios.get(`http://localhost:3000/registrations/${rollNumber}`);
+        const registration = response.data;
+        // console.log(response);
+        if (response.status === 200) {
+          window.location.href = './main_honors_reg.html';
+        } else {
+          alert('You are already registered for this course.');
+        }
+      } catch (error) {
+        console.error('Error checking registration:', error);
+        alert('Already registered for honors');
+      }
+    });
     const modal = document.getElementById('coursesModal');
     const viewRegisteredCourses = document.getElementById('viewRegisteredCourses');
     const closeModal = document.getElementById('closeModal');
@@ -221,7 +242,7 @@ document.getElementById('logout').addEventListener('click', function (e) {
 });
 
   </script>
-
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

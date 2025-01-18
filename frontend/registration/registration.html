@@ -24,10 +24,6 @@
     <button id="loginButton">Student Login</button>
   </div>
  
-  <div id="adminOptions" style="display: none;">
-    <button id="adminFeature1">Create Admin Profile</button>
-    <button id="adminFeature2">Admin Login</button>
-  </div>
   
   <!-- Registration Form (hidden by default) -->
   <div id="registrationSection" style="display: none;">
@@ -65,10 +61,9 @@
         <label for="department">Department:</label>
         <input type="text" id="department" name="department" required>
         <br><br>
-
-        <label for="mobile_no">Mobile No:</label>
-        <input type="number" id="mobile_no" name="mobile_no" required>
-        <br><br>
+        <label for="mobile_no">Mobile No (+91):</label>
+      <input type="text" id="mobile_no" name="mobile_no" maxlength="10" placeholder="Enter 10 digit phone number" required>
+      <br><br>
 
         <label for="password">Set Password:</label>
         <input type="password" id="password" name="password" required>
@@ -98,12 +93,27 @@
       <button type="submit">Login</button>
     </form>
   </div>
+  <!-- Admin Login Form -->
+  <div id="adminLoginSection" style="display: none;">
+    <h2>Admin Login</h2>
+    <form id="adminLoginForm">
+      <label for="adminUsername">Username:</label>
+      <input type="text" id="adminUsername" name="adminUsername" required>
+      <br><br>
+      <label for="adminPassword">Password:</label>
+      <input type="password" id="adminPassword" name="adminPassword" required>
+      <br><br>
+      <button type="submit">Login</button>
+    </form>
+  </div>
 
   <script>
     // Toggle between Create Profile and Login sections
     document.getElementById('studentLoginButton').addEventListener('click', () => {
       document.getElementById('studentOptions').style.display = 'block';
-      document.getElementById('adminOptions').style.display = 'none';
+      // document.getElementById('adminOptions').style.display = 'none';
+      document.getElementById('adminLoginSection').style.display = 'none';
+  
     });
 
     // Create Profile and Login button functionality
@@ -120,7 +130,8 @@
     // Admin Login button functionality (no action for now)
     document.getElementById('adminLoginButton').addEventListener('click', () => {
       document.getElementById('studentOptions').style.display = 'none';
-      document.getElementById('adminOptions').style.display = 'block';
+      // document.getElementById('adminOptions').style.display = 'block';
+      document.getElementById('adminLoginSection').style.display = 'block';
       document.getElementById('loginSection').style.display = 'none';
       document.getElementById('registrationSection').style.display = 'none';
     });
@@ -236,7 +247,8 @@
       event.preventDefault();
       const rollNumber = document.getElementById('loginRollNumber').value;
       const password = document.getElementById('loginPassword').value;
-
+      const department = document.getElementById('department').value.trim();
+      
       try {
         const response = await axios.post('http://localhost:3000/loginStudent', {
           username: rollNumber,
@@ -247,8 +259,10 @@
           // Save the token as userToken in sessionStorage
           sessionStorage.setItem('userToken', response.data.token);
           sessionStorage.setItem('userRollNumber', rollNumber);
+          sessionStorage.setItem('userDepartment', department);
+          
           // sessionStorage.setItem('userEmail', response.data.email);
-
+          document.getElementById('loginForm').reset();
           // Optionally, redirect the user or update the UI
           alert('Login successful');
           // Redirect to another page or update the UI here
@@ -260,7 +274,35 @@
         alert('Invalid Username and Password');
       }
     });
+    document.getElementById('adminLoginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const username = document.getElementById('adminUsername').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+
+      try {
+        const response = await axios.post('http://localhost:3000/adminLogin', {
+          username: username,
+          password: password
+        });
+       
+        if (response.data.token) {
+          // sessionStorage.setItem('userToken', response.data.token);
+          // sessionStorage.setItem('userName', username);
+          sessionStorage.setItem('adminToken', response.data.token);
+      sessionStorage.setItem('adminUsername', username);
+      document.getElementById('adminLoginForm').reset();
+          alert('Admin Login successful');
+          // Redirect to Admin Dashboard
+          window.location.href = 'admin_dashboard.html';
+        } else {
+          alert('Invalid Admin credentials');
+        }
+      } catch (error) {
+        alert('An error occurred during Admin Login');
+      }
+    });
   </script>
+  
 </body>
 
 </html>
