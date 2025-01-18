@@ -12,6 +12,7 @@ const registrationController = require('./controllers/checkRegController');
 const courseController = require('./controllers/courseController');
 const viewCoursesController = require('./controllers/viewCoursesController');
 const deleteCourseController = require('./controllers/deleteCourseController');
+const getCourseController = require('./controllers/getCoursesController');
 
 const cors = require('cors');
 // Route to insert users from Excel file
@@ -42,9 +43,11 @@ db.connect((err) => {
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+app.get('/getCourses', getCourseController.getCoursesController)
+
 app.post('/viewcourses', viewCoursesController.viewCoursesController)
 app.post('/addcourse', courseController.insertCourse);
-app.delete('/deletecourse/${courseId}', deleteCourseController.deleteCourse);
+app.get('/deletecourse/:courseId', deleteCourseController.deleteCourse);
 app.get('/registrations/:rollNumber', registrationController.checkRegistrationStatus);
 app.post('/adminLogin', adminController.adminLogin);
 app.post('/registerHonors', honorsRegController.registerHonors);
@@ -66,7 +69,7 @@ app.get('/users', (req, res) => {
 
 // `http://localhost:3000/students/${rollNumber}`
 
-app.post('/students/:rollNumber', (req, res) => {
+app.post('/students/:rollNumber', (req, res) => {  
   const rollNumber = req.params.rollNumber;
   const query = 'SELECT * FROM students WHERE rollNo = ?'; // Check if roll_number column exists
 

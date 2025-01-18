@@ -76,7 +76,7 @@ function verifyToken(req, res) {
 // Controller to insert honors registration data
 exports.registerHonors = async (req, res) => {
   const { rollNumber, year, sem, avgscore, course } = req.body;
-  console.log(rollNumber, year, sem, avgscore);
+  // console.log(rollNumber, year, sem, avgscore);
 
   // Check if all required fields are present
   if (!rollNumber || !year || !sem || !avgscore) {
@@ -134,15 +134,34 @@ exports.registerHonors = async (req, res) => {
     } else {
       // Student doesn't exist
       
-      const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, avg_score, course_id) VALUES (?, ?, ?, ?, ?)';
-      db.query(insertHonorsQuery, [rollNumber, year, sem, avgscore, JSON.stringify(courseToInsert)], (err, insertResults) => {
-        if (err) {
-          console.error('Error inserting honors registration data:', err);
-          return res.status(500).json({ message: 'Error inserting honors registration data' });
-        }
+     // First, fetch the department using the rollNumber
+const getDepartmentQuery = 'SELECT department FROM students WHERE rollNo = ?';
 
-        return res.status(200).json({ message: 'Honors registration successful' });
-      });
+db.query(getDepartmentQuery, [rollNumber], (err, results) => {
+  if (err) {
+    console.error('Error fetching department:', err);
+    return res.status(500).json({ message: 'Error fetching department' });
+  }
+
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'Student not found' });
+  }
+
+  const department = results[0].department; // Get the department from the query result
+
+  // Now, proceed with the INSERT INTO query
+  const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, avg_score, course_id, department) VALUES (?, ?, ?, ?, ?, ?)';
+
+  db.query(insertHonorsQuery, [rollNumber, year, sem, avgscore, JSON.stringify(courseToInsert), department], (err, insertResults) => {
+    if (err) {
+      console.error('Error inserting honors registration data:', err);
+      return res.status(500).json({ message: 'Error inserting honors registration data' });
+    }
+
+    return res.status(200).json({ message: 'Honors registration successful' });
+  });
+});
+
     }
   });
 };
