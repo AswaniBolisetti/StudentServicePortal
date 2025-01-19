@@ -122,6 +122,7 @@
     <div class="add-course-container">
         <button onclick="showForm()">Add Course</button>
         <button onclick="viewAddedCourses()">View Added Courses</button>
+        <button onclick="showStudentUpload()">Add Student Details</button>
         <form id="courseForm">
             <label for="year">Year:</label>
     <select id="year" name="year" required>
@@ -178,9 +179,16 @@
                 </tbody>
             </table>
         </div>
-    </div>
+
+    </div> <form id="studentUploadForm" style="display: none;" enctype="multipart/form-data">
+        <label for="studentFile">Upload Student Excel File:</label>
+        <input type="file" id="studentFile" name="studentFile" accept=".xlsx, .xls" required>
+        <br><br>
+        <button type="button" onclick="uploadStudentFile()">Upload</button>
+    </form>
 
     <script>
+
         // Check if admin is logged in
         const adminToken = sessionStorage.getItem('adminToken');
         const adminUsername = sessionStorage.getItem('adminUsername');
@@ -217,8 +225,12 @@
             form.style.display = 'block';
             addedCourses.style.display = 'none';
         }
+function showStudentUpload() {
+        document.getElementById('courseForm').style.display = 'none';
+        document.getElementById('addedCourses').style.display = 'none';
+        document.getElementById('studentUploadForm').style.display = 'block';
+    }
 
-        // Show added courses in table format
       // Show added courses in table format
 // Show added courses in table format
 async function viewAddedCourses() {

@@ -27,7 +27,7 @@ exports.getCoursesController =(req, res) => {
         }
       
         const department = results[0].department;
-      const query = 'SELECT course_name FROM courses WHERE year = ? AND sem = ? AND department = ?';
+      const query = 'SELECT course_name, course_id FROM courses WHERE year = ? AND sem = ? AND department = ?';
       db.query(query, [year, sem, department], (err, results) => {
         if (err) {
           console.error('Error fetching courses:', err);

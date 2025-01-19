@@ -261,7 +261,7 @@
     try {
       // Replace with your API endpoint
       const response = await axios.get(`http://localhost:3000/getCourses?year=${year}&sem=${sem}&rollNumber=${rollNumber}`);
-      console.log(response.data);
+      console.log('Course detailes : '+response.data);
       if (response.status === 200) {
         const courses = response.data;
         const courseDropdown = document.getElementById('course');
@@ -293,8 +293,11 @@
       const sem = document.getElementById('sem').value;
       const avgscore = parseFloat(document.getElementById('avgscore').value);
       // const department = document.getElementById('department').value;
-      const course_id = document.getElementById('course').value;
-      console.log(course_id);
+      // const course_id = document.getElementById('course').value;
+      // console.log("Course id : ",course_id);
+      const courseDropdown = document.getElementById('course');
+  const course_id = courseDropdown.value; // Get course_id
+  const course_name = courseDropdown.options[courseDropdown.selectedIndex].textContent; 
 
       if (!rollNumber || !year || !sem || isNaN(avgscore) || !course_id) {
         alert('All fields are required.');
@@ -322,7 +325,8 @@
           year,
           sem,
           avgscore,
-          course_id
+          course_id,
+          course_name
         }, {
           headers: {
             Authorization: `Bearer ${token}`
