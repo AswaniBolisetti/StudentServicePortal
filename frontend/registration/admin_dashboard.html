@@ -184,7 +184,7 @@
         <label for="studentFile">Upload Student Excel File:</label>
         <input type="file" id="studentFile" name="studentFile" accept=".xlsx, .xls" required>
         <br><br>
-        <button type="button" onclick="uploadStudentFile()">Upload</button>
+        <button type="button" id="uploadButton" onclick="uploadStudentFile()">Upload</button>
     </form>
 
     <script>
@@ -224,6 +224,7 @@
             const addedCourses = document.getElementById('addedCourses');
             form.style.display = 'block';
             addedCourses.style.display = 'none';
+            document.getElementById('studentUploadForm').style.display = 'none';
         }
 function showStudentUpload() {
         document.getElementById('courseForm').style.display = 'none';
@@ -238,6 +239,7 @@ async function viewAddedCourses() {
     const addedCourses = document.getElementById('addedCourses');
     form.style.display = 'none';
     addedCourses.style.display = 'block';
+    document.getElementById('studentUploadForm').style.display = 'none';
 
     try {
         const response = await axios.post('http://localhost:3000/viewcourses');
@@ -325,6 +327,41 @@ async function viewAddedCourses() {
                 }
             }
         });
+        const uploadButton = document.getElementById('uploadButton');
+
+uploadButton.addEventListener('click', async () => {
+    const studentFileInput = document.getElementById('studentFile');
+
+    // Ensure a file is selected
+    if (studentFileInput.files.length === 0) {
+        alert('Please select a file to upload.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('studentFile', studentFileInput.files[0]);
+
+    try {
+        // Send the file to the backend for processing
+        const response = await axios.post('http://localhost:3000/upload-users', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        // Handle success or failure
+        if (response.status === 200) {
+            alert(response.data.message || 'File uploaded successfully!');
+        } else {
+            alert('Failed to upload the file. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        alert('An error occurred while uploading the file.');
+    }
+});
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>

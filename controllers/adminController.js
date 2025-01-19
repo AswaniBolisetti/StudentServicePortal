@@ -19,7 +19,7 @@ exports.adminLogin = (req, res) => {
   }
 
   // Query to check if the adminUsername and adminPassword match any record in the admins table
-  const loginQuery = 'SELECT * FROM users WHERE username = ? AND password = ? AND role_id = ?';
+  const loginQuery = 'SELECT * FROM admin WHERE username = ? AND password = ? AND role_id = ?';
 
   // Execute the query
   db.query(loginQuery, [username, password, 2], (err, results) => {

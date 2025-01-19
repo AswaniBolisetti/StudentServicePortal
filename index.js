@@ -52,8 +52,10 @@ app.get('/registrations/:rollNumber', registrationController.checkRegistrationSt
 app.post('/adminLogin', adminController.adminLogin);
 app.post('/registerHonors', honorsRegController.registerHonors);
 app.post('/insertStudent', studentController.insertStudent);
-app.get('/upload-users', userController.insertUsersFromExcel);
+// app.get('/upload-users', userController.insertUsersFromExcel);
 app.post('/loginStudent', loginController.loginUser);
+app.post('/upload-users', userController.uploadStudentFile);
+
 
 // Example route to fetch data from MySQL
 app.get('/users', (req, res) => {
