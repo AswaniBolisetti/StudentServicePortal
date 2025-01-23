@@ -14,7 +14,7 @@ exports.viewRegStudentsDetails = async (req, res) => {
     console.log("details of dept : " + department, year, sem)
   // Query to fetch registered courses based on rollNumber
   
-  const query = 'SELECT * FROM registrations where department = ? AND year = ? AND sem = ?';
+  const query = 'SELECT student_id, course_name FROM registrations where department = ? AND year = ? AND sem = ?';
 
     db.query(query,[department, year, sem], (err, results) => {
         if (err) {

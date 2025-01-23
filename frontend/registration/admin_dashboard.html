@@ -237,7 +237,10 @@
         </select>
         
         <button type="button" onclick="fetchStudentDetails()">Check</button>
+        <button id="downloadButton" style="display: none;" onclick="downloadExcel()">Download</button>
+
     </form>
+    
 </div>
     <script>
 
@@ -278,12 +281,14 @@
             addedCourses.style.display = 'none';
             document.getElementById('studentUploadForm').style.display = 'none';
             document.getElementById('studentDetails').style.display = 'none';
+            document.getElementById('studentDetailsForm').style.display = 'none';
         }
 function showStudentUpload() {
         document.getElementById('courseForm').style.display = 'none';
         document.getElementById('addedCourses').style.display = 'none';
         document.getElementById('studentUploadForm').style.display = 'block';
         document.getElementById('studentDetails').style.display = 'none';
+        document.getElementById('studentDetailsForm').style.display = 'none';
     }
 
       // Show added courses in table format
@@ -295,6 +300,7 @@ async function viewAddedCourses() {
     addedCourses.style.display = 'block';
     document.getElementById('studentUploadForm').style.display = 'none';
     document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('studentDetailsForm').style.display = 'none';
 
     try {
         const response = await axios.post('http://localhost:3000/viewcourses');
@@ -424,6 +430,7 @@ async function viewStudentDetails() {
     document.getElementById('courseForm').style.display = 'none';
     document.getElementById('addedCourses').style.display = 'none';
     document.getElementById('studentUploadForm').style.display = 'none';
+    document.getElementById('studentDetailsForm').style.display = 'none';
     studentDetailsDiv.style.display = 'block';
 
     try {
@@ -464,7 +471,7 @@ async function fetchStudentDetails() {
     const year = document.getElementById('viewYear').value;
     const sem = document.getElementById('viewSemester').value;
 
-    if (!department || !year || !semester) {
+    if (!department || !year || !sem) {
         alert('Please select all the fields.');
         return;
     }
@@ -476,13 +483,49 @@ async function fetchStudentDetails() {
             sem
         });
         const registeredStudents = response.data;
-        console.log('Registered Students : ' + registeredStudents);
-    }catch (error) {
+        if (!registeredStudents || registeredStudents.length === 0) {
+            // Alert if no data is found
+            alert('No registration details found.');
+            return;
+        }
+        console.log('Registered Students : ', registeredStudents);
+
+        // Prepare the Excel data but do not trigger the download yet
+        const worksheet = XLSX.utils.json_to_sheet(registeredStudents);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Registered Students');
+
+        // Store the workbook in a variable to use when the button is clicked
+        window.preparedWorkbook = workbook;
+
+        // Show the download button
+        const downloadButton = document.getElementById('downloadButton');
+        if (downloadButton) {
+            downloadButton.style.display = 'inline-block'; // Show the button
+        }
+    } catch (error) {
         console.error('Error fetching student details:', error);
         alert('Failed to fetch student details. Please try again.');
     }
 }
-    </script>
+
+// Add a separate function for downloading the Excel file
+function downloadExcel() {
+    if (window.preparedWorkbook) {
+        const excelBuffer = XLSX.write(window.preparedWorkbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `RegisteredStudents.xlsx`;
+        link.click();
+    } else {
+        alert('No data available for download. Please fetch student details first.');
+    }
+}
+ </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 </body>
 </html>
