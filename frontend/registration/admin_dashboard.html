@@ -123,6 +123,9 @@
         <button onclick="showForm()">Add Course</button>
         <button onclick="viewAddedCourses()">View Added Courses</button>
         <button onclick="showStudentUpload()">Add Student Details</button>
+        <button onclick="viewStudentDetails()">View Student Details</button>
+        <button onclick="showStudentDetailsForm()">View Registered Student Details</button>
+
         <form id="courseForm">
             <label for="year">Year:</label>
     <select id="year" name="year" required>
@@ -186,7 +189,56 @@
         <br><br>
         <button type="button" id="uploadButton" onclick="uploadStudentFile()">Upload</button>
     </form>
-
+    <div id="studentDetails" style="display: none; margin-top: 20px;">
+        <p>Student Details:</p>
+        <table id="studentsTable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Student data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+    <div id="studentDetailsForm" style="display: none; margin-top: 20px;">
+    <form>
+        <label for="department">Department:</label>
+        <select id="viewDepartment" name="department" required>
+            <option value="">Select Department</option>
+            <option value="CSE">CSE</option>
+            <option value="ECE">ECE</option>
+            <option value="EEE">EEE</option>
+            <option value="Mech">Mech</option>
+        </select>
+        
+        <label for="year">Year:</label>
+        <select id="viewYear" name="year" required>
+            <option value="">Select Year</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        
+        <label for="semester">Semester:</label>
+        <select id="viewSemester" name="semester" required>
+            <option value="">Select Semester</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </select>
+        
+        <button type="button" onclick="fetchStudentDetails()">Check</button>
+    </form>
+</div>
     <script>
 
         // Check if admin is logged in
@@ -225,11 +277,13 @@
             form.style.display = 'block';
             addedCourses.style.display = 'none';
             document.getElementById('studentUploadForm').style.display = 'none';
+            document.getElementById('studentDetails').style.display = 'none';
         }
 function showStudentUpload() {
         document.getElementById('courseForm').style.display = 'none';
         document.getElementById('addedCourses').style.display = 'none';
         document.getElementById('studentUploadForm').style.display = 'block';
+        document.getElementById('studentDetails').style.display = 'none';
     }
 
       // Show added courses in table format
@@ -240,6 +294,7 @@ async function viewAddedCourses() {
     form.style.display = 'none';
     addedCourses.style.display = 'block';
     document.getElementById('studentUploadForm').style.display = 'none';
+    document.getElementById('studentDetails').style.display = 'none';
 
     try {
         const response = await axios.post('http://localhost:3000/viewcourses');
@@ -361,7 +416,72 @@ uploadButton.addEventListener('click', async () => {
     }
 });
 
+async function viewStudentDetails() {
+    const studentDetailsDiv = document.getElementById('studentDetails');
+    const studentsTableBody = document.getElementById('studentsTable').getElementsByTagName('tbody')[0];
 
+    // Hide other sections
+    document.getElementById('courseForm').style.display = 'none';
+    document.getElementById('addedCourses').style.display = 'none';
+    document.getElementById('studentUploadForm').style.display = 'none';
+    studentDetailsDiv.style.display = 'block';
+
+    try {
+        const response = await axios.get('http://localhost:3000/users', {
+            headers: {
+                'Authorization': `Bearer ${adminToken}`,
+            },
+        });
+
+        const students = response.data;
+
+        // Clear previous student data
+        studentsTableBody.innerHTML = '';
+
+        // Dynamically add student data to the table
+        students.forEach(student => {
+            const row = studentsTableBody.insertRow();
+            row.innerHTML = `
+                <td>${student.username}</td>
+                <td>${student.email}</td>
+            `;
+        });
+    } catch (error) {
+        alert('Error fetching student details. Please try again.');
+        console.error(error);
+    }
+}
+function showStudentDetailsForm() {
+    // Hide other sections and show the student details form
+    document.getElementById('courseForm').style.display = 'none';
+    document.getElementById('addedCourses').style.display = 'none';
+    document.getElementById('studentUploadForm').style.display = 'none';
+    document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('studentDetailsForm').style.display = 'block';
+}
+async function fetchStudentDetails() {
+    const department = document.getElementById('viewDepartment').value;
+    const year = document.getElementById('viewYear').value;
+    const sem = document.getElementById('viewSemester').value;
+
+    if (!department || !year || !semester) {
+        alert('Please select all the fields.');
+        return;
+    }
+
+    try {
+        const response = await axios.post('http://localhost:3000/viewregisteredstudents', {
+            department,
+            year,
+            sem
+        });
+        const registeredStudents = response.data;
+        console.log('Registered Students : ' + registeredStudents);
+    }catch (error) {
+        console.error('Error fetching student details:', error);
+        alert('Failed to fetch student details. Please try again.');
+    }
+}
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>

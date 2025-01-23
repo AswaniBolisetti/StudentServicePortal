@@ -48,8 +48,9 @@ exports.insertUsersFromExcel = async (req, res) => {
     const sheet_name_list = workbook.SheetNames;
     const worksheet = workbook.Sheets[sheet_name_list[0]];
 
-    const data = XLSX.utils.sheet_to_json(worksheet);
-
+    let data = XLSX.utils.sheet_to_json(worksheet);
+    data = data.filter((row) => row['Roll No'] && row['Email ID']);
+    
     const users = data.map((row) => ({
       roll_no: row['Roll No'],
       email: row['Email ID'],

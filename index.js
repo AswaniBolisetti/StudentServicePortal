@@ -13,6 +13,8 @@ const courseController = require('./controllers/courseController');
 const viewCoursesController = require('./controllers/viewCoursesController');
 const deleteCourseController = require('./controllers/deleteCourseController');
 const getCourseController = require('./controllers/getCoursesController');
+const viewRegCoursesController = require('./controllers/viewRegCoursesController');
+const viewRegStudentsDetails = require('./controllers/viewRegStudentsDetails');
 
 const cors = require('cors');
 // Route to insert users from Excel file
@@ -44,7 +46,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 app.get('/getCourses', getCourseController.getCoursesController)
-
+app.post('/viewregisteredstudents', viewRegStudentsDetails.viewRegStudentsDetails)
 app.post('/viewcourses', viewCoursesController.viewCoursesController)
 app.post('/addcourse', courseController.insertCourse);
 app.get('/deletecourse/:courseId', deleteCourseController.deleteCourse);
@@ -55,7 +57,7 @@ app.post('/insertStudent', studentController.insertStudent);
 // app.get('/upload-users', userController.insertUsersFromExcel);
 app.post('/loginStudent', loginController.loginUser);
 app.post('/upload-users', userController.uploadStudentFile);
-
+app.post('/registeredCourses/:rollNumber', viewRegCoursesController.registeredCoursesController);
 
 // Example route to fetch data from MySQL
 app.get('/users', (req, res) => {
