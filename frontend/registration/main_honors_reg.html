@@ -263,6 +263,7 @@
       const response = await axios.get(`http://localhost:3000/getCourses?year=${year}&sem=${sem}&rollNumber=${rollNumber}`);
       console.log('Course detailes : '+response.data);
       if (response.status === 200) {
+        alert('Courses fetched');
         const courses = response.data;
         const courseDropdown = document.getElementById('course');
         
@@ -434,7 +435,15 @@ document.getElementById('logout').addEventListener('click', function (e) {
   
   // Redirect to registration.html
   window.location.href = 'registration.html';
+  window.onpageshow = function(event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === 'back_forward') {
+        // Redirect to the login page
+        window.location.href = 'registration.html';
+    }
+};
+
 });
+
   </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

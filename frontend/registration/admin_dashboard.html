@@ -270,7 +270,16 @@
         function logout() {
             sessionStorage.removeItem('adminToken');
             sessionStorage.removeItem('adminUsername');
+            sessionStorage.clear();
+    localStorage.clear();
             window.location.href = 'registration.html';
+            window.onpageshow = function(event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === 'back_forward') {
+        // Redirect to the login page
+        window.location.href = 'registration.html';
+    }
+};
+
         }
 
         // Show the form
