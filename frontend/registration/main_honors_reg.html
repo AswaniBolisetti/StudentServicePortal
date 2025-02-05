@@ -188,12 +188,6 @@
         <option value="">Select semester</option>
         <option value="1">1</option>
         <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
       </select>
     </div>
 
@@ -208,10 +202,7 @@
       </select>
     </div> -->
 
-    <div class="form-section">
-      <label for="avgscore">Average Score (0-100):</label>
-      <input type="number" id="avgscore" name="avgscore" placeholder="Enter your average score" required>
-    </div>
+    
     <div class="form-section">
       <button type="button" id="fetchCoursesButton">Fetch Courses</button>
     </div>
@@ -292,7 +283,7 @@
       // const rollNumber = document.getElementById('rollNumber').value.trim();
       const year = document.getElementById('year').value;
       const sem = document.getElementById('sem').value;
-      const avgscore = parseFloat(document.getElementById('avgscore').value);
+      // const avgscore = parseFloat(document.getElementById('avgscore').value);
       // const department = document.getElementById('department').value;
       // const course_id = document.getElementById('course').value;
       // console.log("Course id : ",course_id);
@@ -300,13 +291,8 @@
   const course_id = courseDropdown.value; // Get course_id
   const course_name = courseDropdown.options[courseDropdown.selectedIndex].textContent; 
 
-      if (!rollNumber || !year || !sem || isNaN(avgscore) || !course_id) {
+      if (!rollNumber || !year || !sem || !course_id) {
         alert('All fields are required.');
-        return;
-      }
-
-      if (avgscore <= 70) {
-        alert('Not eligible for honors registration. Average score must be greater than 70.');
         return;
       }
 
@@ -325,7 +311,6 @@
           rollNumber,
           year,
           sem,
-          avgscore,
           course_id,
           course_name
         }, {

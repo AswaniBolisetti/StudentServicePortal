@@ -65,15 +65,13 @@ function verifyToken(req, res) {
 
 // Controller to insert honors registration data
 exports.registerHonors = async (req, res) => {
-  const { rollNumber, year, sem, avgscore, course_id, course_name } = req.body;
+  const { rollNumber, year, sem, course_id, course_name } = req.body;
 
-  if (!rollNumber || !year || !sem || !avgscore || !course_id) {
+  if (!rollNumber || !year || !sem || !course_id) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
-  if (avgscore <= 70) {
-    return res.status(400).json({ message: 'Not eligible for honors registration. Average score must be greater than 70.' });
-  }
+ 
 
   const tokenVerificationResult = verifyToken(req, res);
   if (tokenVerificationResult) {
@@ -111,9 +109,9 @@ exports.registerHonors = async (req, res) => {
 
     const department = results[0].department;
 
-    const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, avg_score, course_id, course_name, department) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, course_id, course_name, department) VALUES (?, ?, ?, ?, ?, ?)';
 
-    db.query(insertHonorsQuery, [rollNumber, year, sem, avgscore, course_id, course_name, department], (err, insertResults) => {
+    db.query(insertHonorsQuery, [rollNumber, year, sem, course_id, course_name, department], (err, insertResults) => {
       if (err) {
         console.error('Error inserting honors registration data:', err);
         return res.status(500).json({ message: 'Error inserting honors registration data' });

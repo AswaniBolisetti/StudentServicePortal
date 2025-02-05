@@ -4,6 +4,7 @@ const mysql = require('mysql2');
 const app = express();
 const port = 3000;
 const userController = require('./controllers/userControllers');
+const cgpaController = require('./controllers/cgpaController');
 const studentController = require('./controllers/studentController');
 const loginController = require('./controllers/loginController');
 const honorsRegController = require('./controllers/honorsRegController');
@@ -57,11 +58,22 @@ app.post('/insertStudent', studentController.insertStudent);
 // app.get('/upload-users', userController.insertUsersFromExcel);
 app.post('/loginStudent', loginController.loginUser);
 app.post('/upload-users', userController.uploadStudentFile);
+app.post('/upload-cgpa', cgpaController.uploadCGPAFile);
 app.post('/registeredCourses/:rollNumber', viewRegCoursesController.registeredCoursesController);
 
 // Example route to fetch data from MySQL
 app.get('/users', (req, res) => {
   const query = 'SELECT * FROM users';  // Replace with your table name
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching users: ' + err.stack);
+      return res.status(500).send('Error fetching users');
+    }
+    res.json(results);
+  });
+});
+app.get('/cgpa', (req, res) => {
+  const query = 'SELECT * FROM cgpa';  // Replace with your table name
   db.query(query, (err, results) => {
     if (err) {
       console.error('Error fetching users: ' + err.stack);
@@ -91,9 +103,16 @@ app.post('/students/:rollNumber', (req, res) => {
   });
 });
 
-app.get('/users/:rollNumber', (req, res) => {
+app.post('/users/:rollNumber', (req, res) => {
   const rollNumber = req.params.rollNumber;
-  const query = 'SELECT * FROM users WHERE username = ?'; // Check if roll_number column exists
+  
+  // SQL query to join students and cgpa tables
+  const query = `
+    SELECT users.email, cgpa.cgpa
+    FROM users
+    JOIN cgpa ON users.username = cgpa.username
+    WHERE users.username = ?
+  `;
 
   db.query(query, [rollNumber], (err, results) => {
     if (err) {
@@ -105,9 +124,28 @@ app.get('/users/:rollNumber', (req, res) => {
       return res.status(404).send('User not found');
     }
     
-    return res.status(200).json(results[0]); // Send the first matching user
+    // Return combined student data and CGPA
+    return res.status(200).json(results[0]); 
   });
 });
+
+// app.get('/users/:rollNumber', (req, res) => {
+//   const rollNumber = req.params.rollNumber;
+//   const query = 'SELECT * FROM users WHERE username = ?'; // Check if roll_number column exists
+
+//   db.query(query, [rollNumber], (err, results) => {
+//     if (err) {
+//       console.error('Error fetching user data: ' + err.stack);
+//       return res.status(500).send('Error fetching user');
+//     }
+
+//     if (results.length === 0) {
+//       return res.status(404).send('User not found');
+//     }
+    
+//     return res.status(200).json(results[0]); // Send the first matching user
+//   });
+// });
 
 // Start the server
 app.listen(port, () => {

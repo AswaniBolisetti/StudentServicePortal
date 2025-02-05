@@ -122,6 +122,8 @@
     <div class="add-course-container">
         <button onclick="showForm()">Add Course</button>
         <button onclick="viewAddedCourses()">View Added Courses</button>
+        <button onclick="addCGPA()" >Add CGPA Details</button>
+        <button onclick="viewCGPA()">View CGPA Details</button>
         <button onclick="showStudentUpload()">Add Student Details</button>
         <button onclick="viewStudentDetails()">View Student Details</button>
         <button onclick="showStudentDetailsForm()">View Registered Student Details</button>
@@ -140,12 +142,7 @@
         <option value="">Select Semester</option>
         <option value="1">1</option>
         <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="4">5</option>
-        <option value="4">6</option>
-        <option value="4">7</option>
-        <option value="4">8</option>
+        
     </select>
             <label for="department">Department:</label>
             <select id="department" name="department" required>
@@ -191,7 +188,9 @@
             </table>
         </div>
 
-    </div> <form id="studentUploadForm" style="display: none; padding: 2%;" enctype="multipart/form-data">
+    </div> 
+
+    <form id="studentUploadForm" style="display: none; padding: 2%;" enctype="multipart/form-data">
         <p>Example Format:</p>
         <img src="./excelex.jpg" alt="Example Format" style="max-width: 30%; height: auto; margin-bottom: 10px;">
         <br><br>
@@ -200,6 +199,17 @@
         <br><br>
         <button type="button" id="uploadButton" onclick="uploadStudentFile()">Upload</button>
     </form>
+
+    <form id="CGPAUploadForm" style="display: none; padding: 2%;" enctype="multipart/form-data">
+        <p>Example Format:</p>
+        <img src="./cgpaex.jpg" alt="Example Format" style="max-width: 30%; height: auto; margin-bottom: 10px;">
+        <br><br>
+        <label for="CGPAFile">Upload Students CGPA Excel File:</label>
+        <input type="file" id="CGPAFile" name="CGPAFile" accept=".xlsx, .xls" required>
+        <br><br>
+        <button type="button" id="uploadCGPAButton" onclick="uploadCGPAFile()">Upload</button>
+    </form>
+
     <div id="studentDetails" style="display: none; margin-top: 20px;">
         <p>Student Details:</p>
         <table id="studentsTable">
@@ -214,6 +224,25 @@
             </tbody>
         </table>
     </div>
+
+    <div id="CGPADetails" style="display: none; margin-top: 20px;">
+        <p>CGPA Details:</p>
+        <table id="CGPATable">
+            <thead>
+                <tr>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>CGPA</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Student data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+
     <div id="studentDetailsForm" style="display: none; margin-top: 20px;">
     <form>
         <label for="department">Department:</label>
@@ -239,12 +268,7 @@
             <option value="">Select Semester</option>
             <option value="1">1</option>
             <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
+           
         </select>
         
         <button type="button" onclick="fetchStudentDetails()">Check</button>
@@ -313,6 +337,8 @@
             document.getElementById('studentUploadForm').style.display = 'none';
             document.getElementById('studentDetails').style.display = 'none';
             document.getElementById('studentDetailsForm').style.display = 'none';
+            document.getElementById('CGPADetails').style.display = 'none';
+            document.getElementById('CGPAUploadForm').style.display = 'none';
         }
 function showStudentUpload() {
         document.getElementById('courseForm').style.display = 'none';
@@ -320,6 +346,27 @@ function showStudentUpload() {
         document.getElementById('studentUploadForm').style.display = 'block';
         document.getElementById('studentDetails').style.display = 'none';
         document.getElementById('studentDetailsForm').style.display = 'none';
+        document.getElementById('CGPADetails').style.display = 'none';
+        document.getElementById('CGPAUploadForm').style.display = 'none';
+    }
+
+    function addCGPA() {
+        document.getElementById('courseForm').style.display = 'none';
+        document.getElementById('addedCourses').style.display = 'none';
+        document.getElementById('studentUploadForm').style.display = 'none';
+        document.getElementById('studentDetails').style.display = 'none';
+        document.getElementById('studentDetailsForm').style.display = 'none';
+        document.getElementById('CGPADetails').style.display = 'none';
+        document.getElementById('CGPAUploadForm').style.display = 'block';
+        
+    }
+    function viewCGPA() {
+        document.getElementById('courseForm').style.display = 'none';
+        document.getElementById('addedCourses').style.display = 'none';
+        document.getElementById('studentUploadForm').style.display = 'none';
+        document.getElementById('studentDetails').style.display = 'none';
+        document.getElementById('studentDetailsForm').style.display = 'none';
+        document.getElementById('CGPAUploadForm').style.display = 'none';
     }
 
       // Show added courses in table format
@@ -332,6 +379,8 @@ async function viewAddedCourses() {
     document.getElementById('studentUploadForm').style.display = 'none';
     document.getElementById('studentDetails').style.display = 'none';
     document.getElementById('studentDetailsForm').style.display = 'none';
+    document.getElementById('CGPADetails').style.display = 'none';
+    document.getElementById('CGPAUploadForm').style.display = 'none';
 
     try {
         const response = await axios.post('http://localhost:3000/viewcourses');
@@ -444,6 +493,7 @@ uploadButton.addEventListener('click', async () => {
         // Handle success or failure
         if (response.status === 200) {
             alert(response.data.message || 'File uploaded successfully!');
+            studentFileInput.value = '';
         } else {
             alert('Failed to upload the file. Please try again.');
         }
@@ -453,6 +503,87 @@ uploadButton.addEventListener('click', async () => {
     }
 });
 
+
+const uploadCGPAButton = document.getElementById('uploadCGPAButton');
+
+uploadCGPAButton.addEventListener('click', async () => {
+    const CGPAFileInput = document.getElementById('CGPAFile');
+
+    // Ensure a file is selected
+    if (CGPAFileInput.files.length === 0) {
+        alert('Please select a file to upload.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('CGPAFile', CGPAFileInput.files[0]);
+
+    try {
+        // Send the file to the backend for processing
+        const response = await axios.post('http://localhost:3000/upload-cgpa', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        // Handle success or failure
+        if (response.status === 200) {
+            alert(response.data.message || 'File uploaded successfully!');
+            CGPAFileInput.value = '';
+        } else {
+            alert('Failed to upload the file. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        alert('An error occurred while uploading the file.');
+    }
+});
+
+async function viewCGPA() {
+    const studentDetailsDiv = document.getElementById('CGPADetails');
+    const studentsTableBody = document.getElementById('CGPATable').getElementsByTagName('tbody')[0];
+
+    // Hide other sections
+    document.getElementById('courseForm').style.display = 'none';
+    document.getElementById('addedCourses').style.display = 'none';
+    document.getElementById('CGPAUploadForm').style.display = 'none';
+    document.getElementById('studentUploadForm').style.display = 'none';
+    document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('studentDetailsForm').style.display = 'none';
+
+    studentDetailsDiv.style.display = 'block';
+
+    try {
+        const response = await axios.get('http://localhost:3000/cgpa', {
+            headers: {
+                'Authorization': `Bearer ${adminToken}`,
+            },
+        });
+
+        const students = response.data;
+
+        // Clear previous student data
+        studentsTableBody.innerHTML = '';
+
+        // Dynamically add student data to the table
+        students.forEach(student => {
+            const row = studentsTableBody.insertRow();
+            row.innerHTML = `
+                <td>${student.username}</td>
+                <td>${student.Name}</td>
+                <td>${student.CGPA}</td>
+
+                
+            `;
+        });
+    } catch (error) {
+        alert('Error fetching student details. Please try again.');
+        console.error(error);
+    }
+}
+
+
+
 async function viewStudentDetails() {
     const studentDetailsDiv = document.getElementById('studentDetails');
     const studentsTableBody = document.getElementById('studentsTable').getElementsByTagName('tbody')[0];
@@ -460,8 +591,12 @@ async function viewStudentDetails() {
     // Hide other sections
     document.getElementById('courseForm').style.display = 'none';
     document.getElementById('addedCourses').style.display = 'none';
+    document.getElementById('CGPAUploadForm').style.display = 'none';
+    document.getElementById('CGPADetails').style.display = 'none';
+    
     document.getElementById('studentUploadForm').style.display = 'none';
     document.getElementById('studentDetailsForm').style.display = 'none';
+
     studentDetailsDiv.style.display = 'block';
 
     try {
@@ -494,6 +629,8 @@ function showStudentDetailsForm() {
     document.getElementById('courseForm').style.display = 'none';
     document.getElementById('addedCourses').style.display = 'none';
     document.getElementById('studentUploadForm').style.display = 'none';
+    document.getElementById('CGPAUploadForm').style.display = 'none';
+    document.getElementById('CGPADetails').style.display = 'none';
     document.getElementById('studentDetails').style.display = 'none';
     document.getElementById('studentDetailsForm').style.display = 'block';
 }

@@ -226,6 +226,10 @@ input:focus {
       </div>
         <br><br>
 
+        <label for="cgpa">CGPA:</label>
+        <input type="number" id="cgpa" name="cgpa" readonly>
+        <br>
+        <br>
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" readonly>
       <br><br>
@@ -366,14 +370,20 @@ input:focus {
       }
 
       try {
-        const response = await axios.get(`http://localhost:3000/users/${rollNumber}`);
+        const response = await axios.post(`http://localhost:3000/users/${rollNumber}`);
         const user = response.data;
-
+        console.log("CGPA Details : " + user.cgpa + user.email);
         if (user && user.email) {
           fetchedEmail = user.email;
           document.getElementById('email').value = user.email;
+          document.getElementById('cgpa').value = user.cgpa;
           alert('User data fetched successfully.');
-          document.querySelector('.Signin-section').style.display = 'block';
+          if (user.cgpa >= 7.0) {
+        document.querySelector('.Signin-section').style.display = 'block';
+      } else {
+        alert("Not eligible, CGPA is below 7.0 and you can't proceed further");
+        document.querySelector('.Signin-section').style.display = 'none';
+      }
         }
       } catch (error) {
         alert('No user found or an error occurred.');
