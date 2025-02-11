@@ -247,6 +247,9 @@
     const response = await axios.post(`http://localhost:3000/registeredCourses/${rollNumber}`);
     const courses = response.data;
 
+    // Log the courses data to check the structure
+    console.log(courses);
+
     if (response.status === 200 && Array.isArray(courses)) {
       // Get modal body element
       const modalBody = document.querySelector('.modal-body');
@@ -255,15 +258,22 @@
       modalBody.innerHTML = '';
 
       if (courses.length > 0) {
-        // Create a list of courses
+        // Create a list of courses in the desired format
         const courseList = document.createElement('ul');
         courseList.className = 'list-group';
 
         courses.forEach(course => {
-          const courseItem = document.createElement('li');
-          courseItem.className = 'list-group-item';
-          courseItem.textContent = `${course.course_id}: ${course.course_name}`;
-          courseList.appendChild(courseItem);
+          // Parse the course_id and course_name fields to arrays
+          const courseIds = JSON.parse(course.course_id || '[]');
+          const courseNames = JSON.parse(course.course_name || '[]');
+          
+          // Combine course ids and names and create a list item for each course
+          for (let i = 0; i < courseIds.length; i++) {
+            const courseItem = document.createElement('li');
+            courseItem.className = 'list-group-item';
+            courseItem.innerHTML = `<strong>${courseIds[i]}</strong> : ${courseNames[i]}`;  // Format as "1 : IT"
+            courseList.appendChild(courseItem);
+          }
         });
 
         modalBody.appendChild(courseList);

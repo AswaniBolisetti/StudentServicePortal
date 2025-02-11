@@ -207,10 +207,8 @@
       <button type="button" id="fetchCoursesButton">Fetch Courses</button>
     </div>
     <div class="form-section">
-      <label for="course">Select Course:</label>
-      <select id="course" name="course" required>
-        <option value="">Select course</option>
-      </select>
+      <label>Select Course:</label>
+      <div id="courseCheckboxes"></div>
     </div>
 
     <button type="submit">Submit</button>
@@ -241,96 +239,101 @@
     }
 
     document.getElementById('fetchCoursesButton').addEventListener('click', async () => {
-    const year = document.getElementById('year').value;
-    const sem = document.getElementById('sem').value;
+  const year = document.getElementById('year').value;
+  const sem = document.getElementById('sem').value;
 
-    if (!year || !sem) {
-      alert('Please select both year and semester.');
+  if (!year || !sem) {
+    alert('Please select both year and semester.');
+    return;
+  }
+
+  try {
+    // Replace with your API endpoint
+    const response = await axios.get(`http://localhost:3000/getCourses?year=${year}&sem=${sem}&rollNumber=${rollNumber}`);
+    console.log('Course details: ' + response.data);
+    if (response.status === 200) {
+      alert('Courses fetched');
+      const courses = response.data;
+      const courseCheckboxes = document.getElementById('courseCheckboxes');
+      
+      // Clear previous checkboxes
+      courseCheckboxes.innerHTML = '';
+      
+      // Populate new checkboxes
+      courses.forEach(course => {
+        const checkboxContainer = document.createElement('div');
+        checkboxContainer.className = 'form-check';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `course-${course.course_id}`;
+        checkbox.name = 'course';
+        checkbox.value = course.course_id;
+        checkbox.className = 'form-check-input';
+
+        const label = document.createElement('label');
+        label.htmlFor = `course-${course.course_id}`;
+        label.className = 'form-check-label';
+        label.textContent = course.course_name;
+
+        checkboxContainer.appendChild(checkbox);
+        checkboxContainer.appendChild(label);
+        courseCheckboxes.appendChild(checkboxContainer);
+      });
+    } else {
+      alert('Failed to fetch courses. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    alert('Error fetching courses. Please check the console for details.');
+  }
+});
+document.getElementById('honorsForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const year = document.getElementById('year').value;
+  const sem = document.getElementById('sem').value;
+  const selectedCourses = Array.from(document.querySelectorAll('input[name="course"]:checked'))
+    .map(checkbox => ({
+      course_id: checkbox.value,
+      course_name: checkbox.nextElementSibling.textContent
+    }));
+
+    const totalCourses = document.querySelectorAll('input[name="course"]').length;
+    if (selectedCourses.length !== totalCourses) {
+      alert('You must select all courses.');
       return;
     }
 
-    try {
-      // Replace with your API endpoint
-      const response = await axios.get(`http://localhost:3000/getCourses?year=${year}&sem=${sem}&rollNumber=${rollNumber}`);
-      console.log('Course detailes : '+response.data);
-      if (response.status === 200) {
-        alert('Courses fetched');
-        const courses = response.data;
-        const courseDropdown = document.getElementById('course');
-        
-        // Clear previous options
-        courseDropdown.innerHTML = '<option value="">Select course</option>';
-        
-        // Populate new options
-        courses.forEach(course => {
-          const option = document.createElement('option');
-          option.value = course.course_id; // Assuming the course has an `id` field
-          option.textContent = course.course_name; // Assuming the course has a `name` field
-          courseDropdown.appendChild(option);
-        });
-      } else {
-        alert('Failed to fetch courses. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error fetching courses:', error);
-      alert('Error fetching courses. Please check the console for details.');
-    }
-  });
+  if (!rollNumber || !year || !sem || selectedCourses.length === 0) {
+    alert('All fields are required and at least one course must be selected.');
+    return;
+  }
 
-    document.getElementById('honorsForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
+  const token = sessionStorage.getItem('userToken');
 
-      // const rollNumber = document.getElementById('rollNumber').value.trim();
-      const year = document.getElementById('year').value;
-      const sem = document.getElementById('sem').value;
-      // const avgscore = parseFloat(document.getElementById('avgscore').value);
-      // const department = document.getElementById('department').value;
-      // const course_id = document.getElementById('course').value;
-      // console.log("Course id : ",course_id);
-      const courseDropdown = document.getElementById('course');
-  const course_id = courseDropdown.value; // Get course_id
-  const course_name = courseDropdown.options[courseDropdown.selectedIndex].textContent; 
-
-      if (!rollNumber || !year || !sem || !course_id) {
-        alert('All fields are required.');
-        return;
-      }
-
-      const token = sessionStorage.getItem('userToken');
-      // const rollNumber = sessionStorage.getItem('userRollNumber');
-      // const department = sessionStorage.getItem('userDepartment');
-      // const rollNo = sessionStorage.getItem('userRollNumber');
-      // const response = await axios.post('http://localhost:3000/students/${rollNo}')
-      // const userData = response.data;
-      // const department = userData.department;
-      
-
-      // console.log("Dep : "+department);
-      try {
-        const response = await axios.post('http://localhost:3000/registerHonors', {
-          rollNumber,
-          year,
-          sem,
-          course_id,
-          course_name
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        if (response.status === 200) {
-          alert('Honors Registration completed Successfully!');
-          // console.log(department);
-          document.getElementById('honorsForm').reset();
-          window.location.href = './honors_registration.html';
-        }
-      } catch (error) {
-        console.error('Error during registration:', error);
-        alert('Something went wrong');
+  try {
+    const response = await axios.post('http://localhost:3000/registerHonors', {
+      rollNumber,
+      year,
+      sem,
+      courses: selectedCourses
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
     });
-    const modal = document.getElementById('coursesModal');
+
+    if (response.status === 200) {
+      alert('Honors Registration completed Successfully!');
+      document.getElementById('honorsForm').reset();
+      window.location.href = './honors_registration.html';
+    }
+  } catch (error) {
+    console.error('Error during registration:', error);
+    alert('Something went wrong');
+  }
+});  const modal = document.getElementById('coursesModal');
     const viewRegisteredCourses = document.getElementById('viewRegisteredCourses');
     const closeModal = document.getElementById('closeModal');
     const closeModalFooter = document.getElementById('closeModalFooter');
