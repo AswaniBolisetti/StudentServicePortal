@@ -76,17 +76,17 @@ exports.registerHonors = async (req, res) => {
     return tokenVerificationResult;
   }
 
-  const checkExistingStudentQuery = 'SELECT * FROM registrations WHERE student_id = ?';
-  db.query(checkExistingStudentQuery, [rollNumber], (err, results) => {
-    if (err) {
-      console.error('Error checking existing registration:', err);
-      return res.status(500).json({ message: 'Error checking existing registration' });
-    }
+  // const checkExistingStudentQuery = 'SELECT * FROM registrations WHERE student_id = ?';
+  // db.query(checkExistingStudentQuery, [rollNumber], (err, results) => {
+  //   if (err) {
+  //     console.error('Error checking existing registration:', err);
+  //     return res.status(500).json({ message: 'Error checking existing registration' });
+  //   }
 
-    if (results.length > 0) {
-      return res.status(404).json({ message: 'Already registered' });
-    }
-  });
+  //   if (results.length > 0) {
+  //     return res.status(404).json({ message: 'Already registered' });
+  //   }
+  // });
 
   const getDepartmentQuery = 'SELECT department FROM students WHERE rollNo = ?';
   db.query(getDepartmentQuery, [rollNumber], (err, results) => {
@@ -98,16 +98,16 @@ exports.registerHonors = async (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ message: 'Student not found' });
     }
-
+    const currentYear = new Date().getFullYear();
     const department = results[0].department;
 
-    const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, course_id, course_name, department) VALUES (?, ?, ?, ?, ?, ?)';
+    const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, course_id, course_name, department, current_year) VALUES (?, ?, ?, ?, ?, ?, ?)';
     
     // Convert the courses to JSON format
     const courseIds = JSON.stringify(courses.map(course => course.course_id));
     const courseNames = JSON.stringify(courses.map(course => course.course_name));
 
-    db.query(insertHonorsQuery, [rollNumber, year, sem, courseIds, courseNames, department], (err, insertResults) => {
+    db.query(insertHonorsQuery, [rollNumber, year, sem, courseIds, courseNames, department, currentYear], (err, insertResults) => {
       if (err) {
         console.error('Error inserting honors registration data:', err);
         return res.status(500).json({ message: 'Error inserting honors registration data' });

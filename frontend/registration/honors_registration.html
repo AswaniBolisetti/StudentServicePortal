@@ -174,20 +174,7 @@
 
     const registerButton = document.getElementById('registerButton');
     registerButton.addEventListener('click', async () => {
-      try {
-        // Fetch the student registration status using axios
-        const response = await axios.get(`http://localhost:3000/registrations/${rollNumber}`);
-        const registration = response.data;
-        // console.log(response);
-        if (response.status === 200) {
-          window.location.href = './main_honors_reg.html';
-        } else {
-          alert('You are already registered for this course.');
-        }
-      } catch (error) {
-        console.error('Error checking registration:', error);
-        alert('Already registered for honors');
-      }
+      window.location.href = './main_honors_reg.html';
     });
     const modal = document.getElementById('coursesModal');
     const viewRegisteredCourses = document.getElementById('viewRegisteredCourses');

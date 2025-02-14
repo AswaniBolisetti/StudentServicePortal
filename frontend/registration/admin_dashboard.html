@@ -132,8 +132,7 @@
             <label for="year">Year:</label>
     <select id="year" name="year" required>
         <option value="">Select Year</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
+       
         <option value="3">3</option>
         <option value="4">4</option>
     </select>
@@ -245,6 +244,17 @@
 
     <div id="studentDetailsForm" style="display: none; margin-top: 20px;">
     <form>
+        <label for="registered_year">Registration Year:</label>
+        <select id="viewRegisteredYear" name="registered_year" required>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+            <option value="2031">2031</option>
+            <option value="2032">2032</option>
+        </select>
         <label for="department">Department:</label>
         <select id="viewDepartment" name="department" required>
             <option value="">Select Department</option>
@@ -257,8 +267,7 @@
         <label for="year">Year:</label>
         <select id="viewYear" name="year" required>
             <option value="">Select Year</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
+    
             <option value="3">3</option>
             <option value="4">4</option>
         </select>
@@ -638,8 +647,8 @@ async function fetchStudentDetails() {
     const department = document.getElementById('viewDepartment').value;
     const year = document.getElementById('viewYear').value;
     const sem = document.getElementById('viewSemester').value;
-
-    if (!department || !year || !sem) {
+    const registered_year = document.getElementById('viewRegisteredYear').value;
+    if (!department || !year || !sem || !registered_year) {
         alert('Please select all the fields.');
         return;
     }
@@ -648,7 +657,8 @@ async function fetchStudentDetails() {
         const response = await axios.post('http://localhost:3000/viewregisteredstudents', {
             department,
             year,
-            sem
+            sem,
+            registered_year
         });
         const registeredStudents = response.data;
         if (!registeredStudents || registeredStudents.length === 0) {
@@ -696,5 +706,19 @@ function downloadExcel() {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <br>
 <br>
+<script>
+    document.getElementById('year').addEventListener('change', function () {
+  const semDropdown = document.getElementById('semester');
+  
+  if (this.value === '4') {
+    semDropdown.innerHTML = '<option value="1">1</option>';
+  } else {
+    semDropdown.innerHTML = '<option value="">Select semester</option>' +
+                            '<option value="1">1</option>' +
+                            '<option value="2">2</option>';
+  }
+});
+
+</script>
 </body>
 </html>
