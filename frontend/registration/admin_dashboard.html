@@ -48,12 +48,16 @@
             margin: 20px;
         }
         #courseForm {
+            margin: 0 auto;
             display: none;
             margin-top: 20px;
-            padding: 20px;
+            padding: 30px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+            align-items: center;
+            box-shadow:  2px 10px 16px rgba(0, 0, 0, 0.1);
+            background-color: rgb(247, 247, 247);
         }
         #courseForm label {
             display: block;
@@ -78,35 +82,84 @@
         #addedCourses {
             display: none;
             margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
+            padding: 30px;
+            /* border: 1px solid #ddd; */
             border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+            margin: 0 auto;
+            /* background-color: rgb(255, 255, 255); */
         }
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
+    width: 80%; /* Adjust table width as needed */
+    margin: 0 auto; /* Center the table */
+    border-collapse: collapse; /* Ensures no extra space between borders */
+    font-size: 16px; /* Reduce font size */
+    
+}
+
+th, td {
+    padding: 8px; /* Reduce padding between table cells */
+    text-align: left; /* Align text to the left (optional) */
+}
+
+th {
+    background-color: #f4f4f4; /* Optional: Add background color to header */
+    font-weight: bold;
+}
+
+table, th, td {
+    border: 1px solid #ddd; /* Adjust border size */
+}
+
         .delete-btn {
             cursor: pointer;
-            color: rgb(255, 81, 81);
+            color: rgb(67, 7, 7);
             font-size: 1rem;
         }
         .delete-btn:hover {
             color: darkred;
         }
-        
+        .button-container {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 10px;
+    }
+
+    .button-container button {
+        flex: 1;
+        min-width: max-content;
+        padding: 8px 12px;
+    }
+    #studentUploadForm{
+        margin: 0 auto;
+        margin: 0 auto;
+            display: none;
+            margin-top: 20px;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-width: 80%;
+            align-items: center;
+            box-shadow:  2px 10px 16px rgba(0, 0, 0, 0.1);
+            background-color: rgb(247, 247, 247);
+            font-size: 20px;
+    }
+    #CGPAUploadForm{
+        margin: 0 auto;
+            display: none;
+            margin-top: 20px;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-width: 80%;
+            align-items: center;
+            box-shadow:  2px 10px 16px rgba(0, 0, 0, 0.1);
+            background-color: rgb(247, 247, 247);
+            font-size: 20px;
+    }
     </style>
 </head>
 <body>
@@ -120,7 +173,7 @@
         </div>
     </div>
 
-   
+    <div class="button-container">
         <button onclick="showForm()">Add Course</button>
         <button onclick="viewAddedCourses()">View Added Courses</button>
         <button onclick="addCGPA()" >Add CGPA Details</button>
@@ -128,8 +181,11 @@
         <button onclick="showStudentUpload()">Add Student Details</button>
         <button onclick="viewStudentDetails()">View Student Details</button>
         <button onclick="showStudentDetailsForm()">View Registered Student Details</button>
-    <div class="add-course-container">
-        <form id="courseForm">
+   </div>
+
+        <div class="add-course-container">
+            <div class="form-wrapper">
+        <form id="courseForm" >
             <label for="year">Year:</label>
     <select id="year" name="year" required>
         <option value="">Select Year</option>
@@ -161,9 +217,10 @@
 
             <button type="submit">Add Course</button>
         </form>
+    </div>
         <div id="addedCourses">
             <p>Added courses:
-                <select id="departmentFilter" onchange="filterCoursesByDepartment()">
+                <select id="departmentFilter" style="font-size: medium;" onchange="filterCoursesByDepartment()">
                     <option value="">All Departments</option>
                     <option value="CSE">CSE</option>
                     <option value="ECE">ECE</option>
@@ -192,26 +249,26 @@
 
     <form id="studentUploadForm" style="display: none; padding: 2%;" enctype="multipart/form-data">
         <p>Example Format:</p>
-        <img src="./excelex.jpg" alt="Example Format" style="max-width: 30%; height: auto; margin-bottom: 10px;">
+        <img src="./excelex.jpg" alt="Example Format" style="max-width: 50%; height: auto; margin-bottom: 10px;">
         <br><br>
         <label for="studentFile">Upload Student Excel File:</label>
-        <input type="file" id="studentFile" name="studentFile" accept=".xlsx, .xls" required>
+        <input type="file" id="studentFile" style="font-size: medium;" name="studentFile" accept=".xlsx, .xls" required>
         <br><br>
-        <button type="button" id="uploadButton" onclick="uploadStudentFile()">Upload</button>
+        <button type="button" id="uploadButton" onclick="uploadStudentFile()" style="font-size: 18px;">Upload</button>
     </form>
 
     <form id="CGPAUploadForm" style="display: none; padding: 2%;" enctype="multipart/form-data">
         <p>Example Format:</p>
-        <img src="./cgpaex.jpg" alt="Example Format" style="max-width: 30%; height: auto; margin-bottom: 10px;">
+        <img src="./cgpaex.jpg" alt="Example Format" style="max-width: 40%; height: auto; margin-bottom: 10px;">
         <br><br>
         <label for="CGPAFile">Upload Students CGPA Excel File:</label>
-        <input type="file" id="CGPAFile" name="CGPAFile" accept=".xlsx, .xls" required>
+        <input type="file" id="CGPAFile" style="font-size: medium;" name="CGPAFile" accept=".xlsx, .xls" required>
         <br><br>
-        <button type="button" id="uploadCGPAButton" onclick="uploadCGPAFile()">Upload</button>
+        <button type="button" id="uploadCGPAButton" onclick="uploadCGPAFile()" style="font-size: 18px;">Upload</button>
     </form>
 
     <div id="studentDetails" style="display: none; margin-top: 20px;">
-        <p>Student Details:</p>
+        <p style="margin-left: 20px; font-size: 20px;">Student Details:</p>
         <table id="studentsTable">
             <thead>
                 <tr>
@@ -226,7 +283,7 @@
     </div>
 
     <div id="CGPADetails" style="display: none; margin-top: 20px;">
-        <p>CGPA Details:</p>
+        <p style="font-size: 20px; align-items: center; margin-left: 20px;">CGPA Details:</p>
         <table id="CGPATable">
             <thead>
                 <tr>
@@ -243,48 +300,50 @@
     </div>
 
 
-    <div id="studentDetailsForm" style="display: none; margin-top: 20px;">
-    <form>
-        <label for="registered_year">Registration Year:</label>
-        <select id="viewRegisteredYear" name="registered_year" required>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="2029">2029</option>
-            <option value="2030">2030</option>
-            <option value="2031">2031</option>
-            <option value="2032">2032</option>
-        </select>
-        <label for="department">Department:</label>
-        <select id="viewDepartment" name="department" required>
-            <option value="">Select Department</option>
-            <option value="CSE">CSE</option>
-            <option value="ECE">ECE</option>
-            <option value="EEE">EEE</option>
-            <option value="Mech">Mech</option>
-        </select>
-        
-        <label for="year">Year:</label>
-        <select id="viewYear" name="year" required>
-            <option value="">Select Year</option>
+    <div id="studentDetailsForm" style="display: none; margin: 0 auto; margin-top: -10px; max-width: 500px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <form style="display: flex; flex-direction: column; gap: 15px;">
+            <label for="registered_year" style="font-size: 16px; font-weight: bold; color: #333;">Registration Year:</label>
+            <select id="viewRegisteredYear" name="registered_year" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+            </select>
     
-            <option value="3">3</option>
-            <option value="4">4</option>
-        </select>
-        
-        <label for="semester">Semester:</label>
-        <select id="viewSemester" name="semester" required>
-            <option value="">Select Semester</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-           
-        </select>
-        
-        <button type="button" onclick="fetchStudentDetails()">Check</button>
-        <button id="downloadButton" style="display: none;" onclick="downloadExcel()">Download</button>
-
-    </form>
+            <label for="department" style="font-size: 16px; font-weight: bold; color: #333;">Department:</label>
+            <select id="viewDepartment" name="department" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <option value="">Select Department</option>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="EEE">EEE</option>
+                <option value="Mech">Mech</option>
+            </select>
+    
+            <label for="year" style="font-size: 16px; font-weight: bold; color: #333;">Year:</label>
+            <select id="viewYear" name="year" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <option value="">Select Year</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+    
+            <label for="semester" style="font-size: 16px; font-weight: bold; color: #333;">Semester:</label>
+            <select id="viewSemester" name="semester" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <option value="">Select Semester</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+    
+            <div style="display: flex; flex-direction: column;">
+                <button type="button" onclick="fetchStudentDetails()" style="padding: 10px 15px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;">Check</button>
+                <button id="downloadButton" style="display: none; padding: 10px 15px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;">Download</button>
+            </div>
+        </form>
+    </div>
+    
     
 </div>
 <script>
