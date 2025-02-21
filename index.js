@@ -6,6 +6,7 @@ const port = 3000;
 const userController = require('./controllers/userControllers');
 const cgpaController = require('./controllers/cgpaController');
 const studentController = require('./controllers/studentController');
+const updatePasswordController = require('./controllers/updatePasswordController');
 const loginController = require('./controllers/loginController');
 const honorsRegController = require('./controllers/honorsRegController');
 const adminController = require('./controllers/adminController');
@@ -56,6 +57,7 @@ app.get('/registrations/:rollNumber', registrationController.checkRegistrationSt
 app.post('/adminLogin', adminController.adminLogin);
 app.post('/registerHonors', honorsRegController.registerHonors);
 app.post('/insertStudent', studentController.insertStudent);
+app.post('/updatePassword', updatePasswordController.updatePassword);
 // app.get('/upload-users', userController.insertUsersFromExcel);
 app.post('/loginStudent', loginController.loginUser);
 app.post('/upload-users', userController.uploadStudentFile);

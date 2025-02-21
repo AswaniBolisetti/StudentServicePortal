@@ -339,7 +339,7 @@ table, th, td {
     
             <div style="display: flex; flex-direction: column;">
                 <button type="button" onclick="fetchStudentDetails()" style="padding: 10px 15px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;">Check</button>
-                <button id="downloadButton" style="display: none; padding: 10px 15px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;">Download</button>
+                <button id="downloadButton" style="display: none; padding: 10px 15px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;" onclick="downloadExcel()">Download</button>
             </div>
         </form>
     </div>
@@ -726,7 +726,7 @@ async function fetchStudentDetails() {
             alert('No registration details found.');
             return;
         }
-        console.log('Registered Students : ', registeredStudents);
+        console.log('Registered Students data : ', registeredStudents);
 
         // Prepare the Excel data but do not trigger the download yet
         const worksheet = XLSX.utils.json_to_sheet(registeredStudents);
@@ -757,6 +757,9 @@ function downloadExcel() {
         link.href = url;
         link.download = `RegisteredStudents.xlsx`;
         link.click();
+        
+         // Redirect to the admin dashboard
+        
     } else {
         alert('No data available for download. Please fetch student details first.');
     }
