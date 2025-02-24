@@ -14,9 +14,14 @@ const registrationController = require('./controllers/checkRegController');
 const courseController = require('./controllers/courseController');
 const viewCoursesController = require('./controllers/viewCoursesController');
 const deleteCourseController = require('./controllers/deleteCourseController');
+const approveDropReqController = require('./controllers/approveDropReqController');
+
 const getCourseController = require('./controllers/getCoursesController');
 const viewRegCoursesController = require('./controllers/viewRegCoursesController');
 const viewRegStudentsDetails = require('./controllers/viewRegStudentsDetails');
+const viewDroppedStudentsDetails = require('./controllers/viewDroppedStudentsController');
+
+const dropRequestController = require('./controllers/dropReqController');
 
 const cors = require('cors');
 const getYearSemController = require('./controllers/getYearSemController');
@@ -50,12 +55,17 @@ app.get('/', (req, res) => {
 });
 app.get('/getCourses', getCourseController.getCoursesController)
 app.post('/viewregisteredstudents', viewRegStudentsDetails.viewRegStudentsDetails)
+app.post('/viewdroppedstudents', viewDroppedStudentsDetails.viewDroppedStudentsDetails)
+
 app.post('/viewcourses', viewCoursesController.viewCoursesController)
 app.post('/addcourse', courseController.insertCourse);
 app.get('/deletecourse/:courseId', deleteCourseController.deleteCourse);
+app.post('/approvedroprequest/:droprollno', approveDropReqController.approveRequest);
+
 app.get('/registrations/:rollNumber', registrationController.checkRegistrationStatus);
 app.post('/adminLogin', adminController.adminLogin);
 app.post('/registerHonors', honorsRegController.registerHonors);
+app.post('/droprequest', dropRequestController.dropRequest);
 app.post('/insertStudent', studentController.insertStudent);
 app.post('/updatePassword', updatePasswordController.updatePassword);
 // app.get('/upload-users', userController.insertUsersFromExcel);
@@ -68,6 +78,17 @@ app.get('/getYearSem/:rollNumber', getYearSemController.getYearSemController);
 // Example route to fetch data from MySQL
 app.get('/users', (req, res) => {
   const query = 'SELECT * FROM users';  // Replace with your table name
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching users: ' + err.stack);
+      return res.status(500).send('Error fetching users');
+    }
+    res.json(results);
+  });
+});
+
+app.get('/viewdroprequests', (req, res) => {
+  const query = 'SELECT * FROM droprequests where status = 0';  // Replace with your table name
   db.query(query, (err, results) => {
     if (err) {
       console.error('Error fetching users: ' + err.stack);

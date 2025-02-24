@@ -71,7 +71,7 @@
   .dropdown-menu a:hover {
     background-color: #f1f1f1;
   } button {
-      background-color: #4CAF50;
+      background-color: #00134f;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -81,7 +81,7 @@
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #00266d;
     }
     .modal {
     display: none; /* Hidden by default */
@@ -181,10 +181,19 @@
     <p><strong>Phone Number:</strong> <span id="phone-number">N/A</span></p>
     <p><strong>Email:</strong> <span id="email">N/A</span></p>
     <p><strong>Department:</strong> <span id="department">N/A</span></p>
+    <br>
+    <button  id="dropHonorsBtn" style="background-color: red;">Drop From Honors</button>
   </div>
+
+ 
   
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
+
+
+
+
+
     const token = sessionStorage.getItem('userToken');
     const rollNumber = sessionStorage.getItem('userRollNumber');
     console.log("roll number is :" + rollNumber);
@@ -330,6 +339,41 @@ document.getElementById('logout').addEventListener('click', function (e) {
 function goToHome() {
     window.location.href = 'honors_registration.html';
   }
+
+  document.getElementById('dropHonorsBtn').addEventListener('click', async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/getYearSem/${rollNumber}`);
+        console.log("Fetched Data for drop:", response.data);
+        const drop_year = response.data[0].year;
+        const drop_semester = response.data[0].sem;
+        const department = document.getElementById('department').textContent;
+        const name = document.getElementById('name').textContent;
+
+        console.log("year and sem for drop : " + drop_semester, drop_year, department)
+    
+        const dropResponse = await axios.post('http://localhost:3000/droprequest', {
+          rollNumber,
+         drop_semester,
+          drop_year,
+          department,
+          name
+        });
+        if (dropResponse.status === 200) {
+      alert('Drop request has been sent, wait for approval');
+
+    } else {
+      alert('Failed to drop from honors.');
+    }
+    }
+    catch (error) {
+      console.error('Error dropping from honors:', error);
+      alert('You have already sent the request');
+    }
+  });
+   
+
+
+
   </script>
 </body>
 </html>

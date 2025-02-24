@@ -12,30 +12,30 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style> body {
-  background: url('./back8.png') no-repeat center center fixed;  margin: 0;
+  /* background: url('./back8.png') no-repeat center center fixed;  margin: 0; */
   /* filter: saturate(0%); */
-  opacity: 0.9;
+  /* opacity: 0.3; */
   /* background-image: linear-gradient(rgb(149, 192, 255), white); */
-  background-repeat: no-repeat;
-background-size: cover;
-
+  /* background-repeat: no-repeat; */
+/* background-size: cover; */
+background-color: white;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    /* background-color: #f4f4f9; */
+   
+   
   }
 
   .container {
     width: 85%;
     max-width: 400px;
-    background: #ffffff;
+    /* background: #ffffff; */
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 2.5%;
+   
+   
   }
 .container:hover {
   /* opacity: 0.9; */
@@ -58,7 +58,7 @@ background-size: cover;
     width: 100%;
     padding: 8px;
     margin: 8px 0;
-    background-color: #6299d4;
+    background-color: #002955;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -69,10 +69,17 @@ background-size: cover;
   }
 
   button:hover {
-    background-color: #0056b3;
+    background-color: #02002de9;
     outline: none;  
   }
 
+  .close-scheme-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
 
   label {
     font-size: 13px;
@@ -178,21 +185,368 @@ input:focus {
     margin: 0;
   }#createProfileButton,
 #loginButton {
-  background-color: rgb(160, 198, 255);
-  color: rgb(0, 0, 0);
+  background-color: rgb(0, 24, 72);
+  color: rgb(255, 255, 255);
 }
 
 #createProfileButton:hover,
 #loginButton:hover {
-  background-color: rgb(126, 175, 228);
+  background-color: rgb(0, 45, 93);
+}
+.accreditation {
+    display: flex;
+    justify-content: center;
+    gap: 320px; /* Space between the two items */
+  }
+  @media (width: 1648px) and (height: 800px)  {
+  /* Your styles here */
+  .spmvv-logo-left{
+    margin-left: 200px;
+  }
+  .spmvv-logo-right{
+    margin-right: 200px;
+  }
+  .container{
+    width: 90%;
+    max-width: 500px;
+    /* background: #ffffff; */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2.5%;
+  }
+
+}
+.watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 40px;
+  color: rgba(37, 37, 37, 0.03);
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+}
+
+.watermark:nth-child(2) {
+  top: 30%; /* Shift upward */
+  left: 30%;
+}
+
+.watermark:nth-child(3) {
+  top: 70%; /* Shift downward */
+  left: 70%;
+}
+.modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal Content */
+    .modal-content {
+      background-color: rgba(255, 255, 255, 1);
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 12px;
+      width: 60%;
+      max-width: 700px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto; 
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Close Button */
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      font-size: 22px;
+      cursor: pointer;
+      color: #555;
+    }
+
+    .close-btn:hover {
+      color: #000;
+    }
+
+    /* Modal Heading */
+    h3 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Button Styling */
+    #openModal {
+      max-width: 200px;
+      margin-left: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #openModal:hover {
+      background-color: #45a049;
+    }
+    #openSchemeModal {
+      max-width: 200px;
+      margin-left: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #openSchemeModal:hover {
+      background-color: #45a049;
+    }
+
+    /* Responsive Modal */
+    @media (max-width: 768px) {
+      .modal-content {
+        width: 90%;
+      }
+    }
+    #searchInput {
+  margin-left: auto;
+}
+.spmvv-telugu{
+  font-size: 13px;
+}
+.main-heading{
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
+   padding: 10px;
+    margin-bottom: -20px;
+}
+.spmvv-english{
+  font-size: 20px; color: #001223;
+}
+.soet-name{
+  font-size: 27px;
+   color: #002346;
+    margin-bottom: 4px;   
+    letter-spacing: 2px;
+}
+.womens-univ{
+  margin-top: -12px;
+   font-size: 13px;
+}
+.tirupati-heading{
+  margin-top: -6px;
+   font-size: 13px;
+}
+.spmvv-logo-mobile{
+  display: none;
+  height: 130px;
+}
+@media screen and (max-width: 500px) {
+  .spmvv-logo-left,
+  .spmvv-logo-right,
+  .accr {
+    display: none;
+  }
+
+  /* 🔄 Centering Text Content */
+  .spmvv-telugu,
+  .soet-name,
+  .spmvv-english,
+  .womens-univ,
+  .tirupati-heading {
+    font-size: 15px; /* Adjust based on content */
+    text-align: center;
+    margin: 0; /* Removes left margins */
+  }
+  .spmvv-logo-mobile{
+  display: block;
+  align-items: center;
+  margin: 0 auto;
+  height: 80px;
+}
+  .soet-name {
+    font-size: 15.5px;
+    letter-spacing: 0;
+  }
+
+  .spmvv-english,
+  .womens-univ,
+  .tirupati-heading {
+    font-size: 14px;
+  }
+
+  .womens-univ,
+  .tirupati-heading {
+    font-size: 12px;
+  }
+
+  /* 🌟 Optional: Use Flexbox for Full Control */
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+
+/* 📱 Mobile-Specific Adjustment */
+@media screen and (max-width: 500px) {
+  header {
+    justify-content: center;
+  }
+
+  header button {
+    width: auto;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+#departmentSelect {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+}
+
+#schemeLink a {
+  color: #007BFF;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#schemeLink a:hover {
+  text-decoration: underline;
 }
 
   </style>
 </head>
 
 <body>
-  <div class="container">
-  <h1 >Welcome to Student Service Portal</h1>
+  <img src="./logo-left.png" alt="SPMVV LOGO"  class="spmvv-logo-mobile">
+    
+  <div class="watermark">Honors Course Registration</div>
+  <div class="watermark">Honors Course Registration</div>
+  <div class="watermark">Honors Course Registration</div>
+
+  <heading class="main-heading" style="">
+    <img src="./logo-left.png" alt="SPMVV LOGO" style="height: 130px;" class="spmvv-logo-left">
+    
+    <div style="text-align: center;" >
+      <p style="margin-bottom: 2px;" class="spmvv-telugu">శ్రీ పద్మావతి మహిళా విశ్వవిద్యాలయం</p>
+      <h1 class="soet-name"><b>SCHOOL OF ENGINEERING AND TECHNOLOGY</b></h1>
+      <h1 class="spmvv-english"><b>SRI PADMAVATI MAHILA VISVAVIDYALAYAM</b></h1>
+
+      <h6 class="womens-univ">(Women's University)</h6>
+      <h6 class="tirupati-heading">Tirupati, Andhra Pradesh-517502, India</h6>
+      <div class="accreditation">
+        <h6 style="font-size: 14px;" class="accr">Accredited with <b style="color: rgb(229, 0, 0);">"A+"</b> Grade by NAAC</h6>
+        <h6 style="font-size: 14px;" class="accr">ISO 21001 : 2018 Certified</h6>
+      </div>
+    </div>
+  
+    <img src="./logo_right.jpg" alt="Azadi ka amrit mahotsav" style="height: 100px;" class="spmvv-logo-right">
+  </heading>
+  
+<hr style="border: 0.5px solid black; width: 100%;">
+
+<!-- Modal Trigger Button -->
+ <header>
+<button id="openModal">View Eligible List</button>
+<button id="openSchemeModal">View Scheme</button>
+</header>
+<!-- Modal -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Eligible Students List</h2>
+
+    <!-- 🔍 Search Input -->
+    <input type="text" id="searchInput" placeholder="Search Roll Number or Name" 
+        style="padding: 5px; width: 200px; border: 1px solid #ccc; border-radius: 4px;">
+    <!-- 🧾 Students Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Roll Number</th>
+          <th>Name</th>
+          <th>CGPA</th>
+        </tr>
+      </thead>
+      <tbody id="studentsTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="schemeModal" class="modal">
+  <div class="modal-content">
+    <span class="close-scheme-btn">&times;</span>
+    <h2>Scheme Details</h2>
+
+    <!-- 🔽 Department Dropdown -->
+    <label for="departmentSelect">Select Department:</label>
+    <select id="departmentSelect">
+      <option value="">--Select Department--</option>
+      <option value="CSE">CSE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="Mech">Mech</option>
+    </select>
+
+    <!-- 🔗 Scheme Link Display -->
+    <div id="schemeLink" style="margin-top: 20px; display: none;">
+      <p>Click the below link to open Scheme:</p>
+      <a href="#" id="schemeAnchor" target="_blank">Open Scheme</a>
+    </div>
+  </div>
+</div>
+
+<br>
+  <div class="container" style="border: 1.5px solid black;">
+  <h1 style="font-size: 15px;"><b>Welcome to Student Service Portal</b></h1>
+  
   <div class="button-container">
   <!-- Buttons to toggle between Create Profile and Login -->
   <button id="studentLoginButton">Student</button>
@@ -222,7 +576,7 @@ input:focus {
       <label for="rollNumber">Roll Number:</label>
       <div style="display: flex; align-items: center; margin-bottom: -30px;">
         <input type="text" id="rollNumber" name="rollNumber" required style="flex-grow: 1; margin-right: 0px;">
-        <button type="button" id="checkButton" style="width:auto; margin-top: -1px; margin-left: 2px; padding: 8.5px; color: black;">Check</button>
+        <button type="button" id="checkButton" style="width:auto; margin-top: -1px; margin-left: 2px; padding: 8.5px; color: rgb(255, 255, 255);">Check</button>
       </div>
         <br><br>
 
@@ -307,6 +661,116 @@ input:focus {
   </div>
 </div>
   <script>
+ const openModal = document.getElementById('openModal');
+const modal = document.getElementById('myModal');
+const closeBtn = document.querySelector('.close-btn');
+const studentsTableBody = document.getElementById('studentsTableBody');
+const searchInput = document.getElementById('searchInput');
+const adminToken = 'your_admin_token_here'; // Replace with actual token
+let students = []; // Store fetched data globally
+
+// Open Modal and Fetch Data
+openModal.addEventListener('click', async () => {
+  modal.style.display = 'block';
+
+  try {
+    const response = await axios.get('http://localhost:3000/cgpa', {
+      headers: {
+        'Authorization': `Bearer ${adminToken}`,
+      },
+    });
+
+    students = response.data;
+    displayStudents(students); // Display all students initially
+
+  } catch (error) {
+    alert('Error fetching student details. Please try again.');
+    console.error(error);
+  }
+});
+
+// 🎯 Modal Elements// 🎯 Modal Elements
+const openSchemeModal = document.getElementById('openSchemeModal');
+const schemeModal = document.getElementById('schemeModal');
+const closeSchemeBtn = document.querySelector('.close-scheme-btn');
+const departmentSelect = document.getElementById('departmentSelect');
+const schemeLinkDiv = document.getElementById('schemeLink');
+const schemeAnchor = document.getElementById('schemeAnchor');
+
+// 🗂️ Department Links
+const schemeLinks = {
+  CSE: 'https://spmvv.ac.in/soetfiles/cse/2024/R23_B.Tech_Scheme.pdf',
+  ECE: 'https://spmvv.ac.in/soetfiles/ece/2024/R23_B.Tech_Scheme.pdf',
+  EEE: 'https://spmvv.ac.in/soetfiles/eee/2024/R23_B.Tech_Scheme.pdf',
+  Mech: 'https://spmvv.ac.in/soetfiles/mech/2024/R23_B.Tech_Scheme.pdf'
+};
+
+// 📂 Open Modal
+openSchemeModal.addEventListener('click', () => {
+  schemeModal.style.display = 'block';
+  schemeLinkDiv.style.display = 'none'; // Reset link display on open
+  departmentSelect.value = ''; // Reset dropdown
+});
+
+//  Close Modal
+closeSchemeBtn.addEventListener('click', () => {
+  schemeModal.style.display = 'none';
+});
+
+// 🖱️ Close Modal When Clicking Outside
+window.addEventListener('click', (e) => {
+  if (e.target === schemeModal) {
+    schemeModal.style.display = 'none';
+  }
+});
+
+// 🔄 Handle Department Selection
+departmentSelect.addEventListener('change', () => {
+  const selectedDept = departmentSelect.value;
+  if (schemeLinks[selectedDept]) {
+    schemeAnchor.href = schemeLinks[selectedDept];
+    schemeLinkDiv.style.display = 'block';
+  } else {
+    schemeLinkDiv.style.display = 'none';
+  }
+});
+
+
+// Display Students in the Table
+function displayStudents(data) {
+  studentsTableBody.innerHTML = ''; // Clear table
+
+  data.forEach(student => {
+    const row = studentsTableBody.insertRow();
+    row.innerHTML = `
+      <td>${student.username}</td>
+      <td>${student.Name}</td>
+      <td>${student.CGPA}</td>
+    `;
+  });
+}
+
+// Search Functionality
+searchInput.addEventListener('input', () => {
+  const searchTerm = searchInput.value.toLowerCase();
+  const filteredStudents = students.filter(student =>
+    student.username.toLowerCase().includes(searchTerm) ||
+    student.Name.toLowerCase().includes(searchTerm)
+  );
+  displayStudents(filteredStudents); // Display filtered results
+});
+
+// Close Modal
+
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target == modal) {
+      modal.style.display = 'none';
+    }
+  });
     // Toggle between Create Profile and Login sections
     document.getElementById('studentLoginButton').addEventListener('click', () => {
       document.getElementById('studentOptions').style.display = 'block';
@@ -482,7 +946,12 @@ input:focus {
         }
         window.location.href = 'honors_registration.html';
       } catch (error) {
-        alert('Invalid Username and Password');
+        if (error.response && error.response.status === 403) {
+      // Handling approved drop request
+      alert('Your drop request has been approved. You can’t proceed further.');
+    } else {
+      alert('Invalid Username or Password');
+    }
       }
     });
     document.getElementById('adminLoginForm').addEventListener('submit', async (event) => {

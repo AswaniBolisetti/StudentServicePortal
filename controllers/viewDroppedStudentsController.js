@@ -9,19 +9,19 @@ const db = mysql.createConnection({
 });
 
 // Controller to fetch registered courses
-exports.viewRegStudentsDetails = async (req, res) => {
-    const { department, year, sem, registered_year} = req.body; // Access query parameter for rollNumber
-    console.log("details of dept : " + department, year, sem, registered_year)
+exports.viewDroppedStudentsDetails = async (req, res) => {
+    const { department, year, sem, dropped_year} = req.body; // Access query parameter for rollNumber
+    console.log("details of dept : " + department, year, sem, dropped_year)
   // Query to fetch registered courses based on rollNumber
   
   const query = `
-        SELECT r.student_id, s.name
-        FROM registrations r
-        JOIN students s ON r.student_id = s.rollNo
-        WHERE r.department = ? AND r.year = ? AND r.sem = ? AND r.current_year = ? AND dropped_status = 0
+       SELECT rollNo, Name from 
+       droprequests where year = ? and sem = ? 
+       and department = ? and status = 1 and
+        current_year = ?
     `;
 
-    db.query(query,[department, year, sem, registered_year], (err, results) => {
+    db.query(query,[year, sem, department, dropped_year], (err, results) => {
         if (err) {
             console.error('Error fetching registered courses:', err);
             return res.status(500).json({ message: 'Failed to retrieve registered courses' });

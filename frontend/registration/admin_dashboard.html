@@ -71,7 +71,7 @@
             border-radius: 5px;
         }
         #courseForm button {
-            background-color: #007bff;
+            background-color: #002854;
             color: white;
             border: none;
             cursor: pointer;
@@ -181,7 +181,10 @@ table, th, td {
         <button onclick="showStudentUpload()">Add Student Details</button>
         <button onclick="viewStudentDetails()">View Student Details</button>
         <button onclick="showStudentDetailsForm()">View Registered Student Details</button>
-   </div>
+        <button onclick="viewStudentDropDetails()">Drop Requests</button>
+        <button onclick="viewDroppedStudentDetails()">View Dropped Students Details</button>
+
+    </div>
 
         <div class="add-course-container">
             <div class="form-wrapper">
@@ -282,6 +285,25 @@ table, th, td {
         </table>
     </div>
 
+    <div id="studentDropDetails" style="display: none; margin-top: 20px;">
+        <p style="margin-left: 20px; font-size: 20px;">Student Drop Request Details:</p>
+        <table id="studentsDropTable">
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Student data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
     <div id="CGPADetails" style="display: none; margin-top: 20px;">
         <p style="font-size: 20px; align-items: center; margin-left: 20px;">CGPA Details:</p>
         <table id="CGPATable">
@@ -299,7 +321,54 @@ table, th, td {
         </table>
     </div>
 
+    <div id="DroppedStudentsDetailsForm" style="display: none; margin: 0 auto; margin-top: -10px; max-width: 500px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <form style="display: flex; flex-direction: column; gap: 15px;">
+            <label for="dropped_year" style="font-size: 16px; font-weight: bold; color: #333;">Dropped Year:</label>
+            <select id="viewDroppedYear" name="dropped_year" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+                <option value="2032">2033</option>
+                <option value="2032">2034</option>
+                <option value="2032">2035</option>
+            </select>
+    
+            <label for="department-drop" style="font-size: 16px; font-weight: bold; color: #333;">Department:</label>
+            <select id="viewDepartmentDrop" name="department-drop" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <option value="">Select Department</option>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="EEE">EEE</option>
+                <option value="Mech">Mech</option>
+            </select>
+    
+            <label for="year-drop" style="font-size: 16px; font-weight: bold; color: #333;">Year:</label>
+            <select id="viewYearDrop" name="year-drop" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <option value="">Select Year</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+    
+            <label for="semester-drop" style="font-size: 16px; font-weight: bold; color: #333;">Semester:</label>
+            <select id="viewSemesterDrop" name="semester-drop" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <option value="">Select Semester</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+    
+            <div style="display: flex; flex-direction: column;">
+                <button type="button" onclick="fetchDroppedStudentsDetails()" style="padding: 10px 15px; background-color: #002b59; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;">Check</button>
+                <button id="downloadDropButton" style="display: none; padding: 10px 15px; background-color: #001f41; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;" onclick="downloadDroppedDetailsExcel()">Download</button>
+            </div>
+        </form>
+    </div>
 
+    
     <div id="studentDetailsForm" style="display: none; margin: 0 auto; margin-top: -10px; max-width: 500px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
         <form style="display: flex; flex-direction: column; gap: 15px;">
             <label for="registered_year" style="font-size: 16px; font-weight: bold; color: #333;">Registration Year:</label>
@@ -336,10 +405,11 @@ table, th, td {
                 <option value="1">1</option>
                 <option value="2">2</option>
             </select>
+
     
             <div style="display: flex; flex-direction: column;">
-                <button type="button" onclick="fetchStudentDetails()" style="padding: 10px 15px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;">Check</button>
-                <button id="downloadButton" style="display: none; padding: 10px 15px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;" onclick="downloadExcel()">Download</button>
+                <button type="button" onclick="fetchStudentDetails()" style="padding: 10px 15px; background-color: #002b59; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;">Check</button>
+                <button id="downloadButton" style="display: none; padding: 10px 15px; background-color: #001f41; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;" onclick="downloadExcel()">Download</button>
             </div>
         </form>
     </div>
@@ -408,6 +478,10 @@ table, th, td {
             document.getElementById('studentDetailsForm').style.display = 'none';
             document.getElementById('CGPADetails').style.display = 'none';
             document.getElementById('CGPAUploadForm').style.display = 'none';
+            document.getElementById('studentDropDetails').style.display = 'none';
+            document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
+            
         }
 function showStudentUpload() {
         document.getElementById('courseForm').style.display = 'none';
@@ -417,6 +491,9 @@ function showStudentUpload() {
         document.getElementById('studentDetailsForm').style.display = 'none';
         document.getElementById('CGPADetails').style.display = 'none';
         document.getElementById('CGPAUploadForm').style.display = 'none';
+        document.getElementById('studentDropDetails').style.display = 'none';
+        document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
     }
 
     function addCGPA() {
@@ -427,6 +504,9 @@ function showStudentUpload() {
         document.getElementById('studentDetailsForm').style.display = 'none';
         document.getElementById('CGPADetails').style.display = 'none';
         document.getElementById('CGPAUploadForm').style.display = 'block';
+        document.getElementById('studentDropDetails').style.display = 'none';
+        document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
         
     }
     function viewCGPA() {
@@ -435,6 +515,9 @@ function showStudentUpload() {
         document.getElementById('studentUploadForm').style.display = 'none';
         document.getElementById('studentDetails').style.display = 'none';
         document.getElementById('studentDetailsForm').style.display = 'none';
+        document.getElementById('studentDropDetails').style.display = 'none';
+        document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
         document.getElementById('CGPAUploadForm').style.display = 'none';
     }
 
@@ -449,6 +532,9 @@ async function viewAddedCourses() {
     document.getElementById('studentDetails').style.display = 'none';
     document.getElementById('studentDetailsForm').style.display = 'none';
     document.getElementById('CGPADetails').style.display = 'none';
+    document.getElementById('studentDropDetails').style.display = 'none';
+    document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
     document.getElementById('CGPAUploadForm').style.display = 'none';
 
     try {
@@ -483,9 +569,7 @@ async function viewAddedCourses() {
                 if (isConfirmed) {
                     try {
                         const response = await axios.get(`http://localhost:3000/deletecourse/${courseId}`, {
-                            headers: {
-                                'Authorization': `Bearer ${adminToken}`,
-                            },
+                            
                         });
 
                         if (response.status === 200) {
@@ -618,6 +702,9 @@ async function viewCGPA() {
     document.getElementById('CGPAUploadForm').style.display = 'none';
     document.getElementById('studentUploadForm').style.display = 'none';
     document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('studentDropDetails').style.display = 'none';
+    document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
     document.getElementById('studentDetailsForm').style.display = 'none';
 
     studentDetailsDiv.style.display = 'block';
@@ -659,6 +746,9 @@ async function viewStudentDetails() {
 
     // Hide other sections
     document.getElementById('courseForm').style.display = 'none';
+    document.getElementById('studentDropDetails').style.display = 'none';
+    document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
     document.getElementById('addedCourses').style.display = 'none';
     document.getElementById('CGPAUploadForm').style.display = 'none';
     document.getElementById('CGPADetails').style.display = 'none';
@@ -693,6 +783,87 @@ async function viewStudentDetails() {
         console.error(error);
     }
 }
+
+async function viewStudentDropDetails() {
+    const studentDropDetailsDiv = document.getElementById('studentDropDetails');
+    const studentsTableBody = document.getElementById('studentsDropTable').getElementsByTagName('tbody')[0];
+
+    // Hide other sections
+    document.getElementById('courseForm').style.display = 'none';
+    document.getElementById('addedCourses').style.display = 'none';
+    document.getElementById('CGPAUploadForm').style.display = 'none';
+    document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
+    document.getElementById('CGPADetails').style.display = 'none';
+    
+    document.getElementById('studentUploadForm').style.display = 'none';
+    document.getElementById('studentDetailsForm').style.display = 'none';
+
+    studentDropDetailsDiv.style.display = 'block';
+
+    try {
+        const response = await axios.get('http://localhost:3000/viewdroprequests', {
+        });
+
+        const droprequests = response.data;
+        console.log("drop data is : " + droprequests)
+        // Clear previous student data
+        studentsTableBody.innerHTML = '';
+
+        // Dynamically add student data to the table
+        droprequests.forEach(droprequests => {
+            const row = studentsTableBody.insertRow();
+            row.innerHTML = `
+                <td>${droprequests.rollNo}</td>
+                <td>${droprequests.name}</td>
+
+                <td>${droprequests.year}</td>
+                <td>${droprequests.sem}</td>
+                <td>${droprequests.department}</td>
+                <td> <button class="approve-btn" drop-rollno="${droprequests.rollNo}" drop-year="${droprequests.year}" drop-sem="${droprequests.sem}">Accept</button> </td>
+            `;
+        });
+        const approveButtons = document.querySelectorAll('.approve-btn');
+        approveButtons.forEach(button => { 
+            button.addEventListener('click', async function() {
+                const droprollno = this.getAttribute('drop-rollno');
+                const dropyear = this.getAttribute('drop-year');
+                const dropsem = this.getAttribute('drop-sem');
+                // Show confirmation popup before deletion
+                const isConfirmed = window.confirm('Are you sure you approve the drop request?');
+                
+                if (isConfirmed) {
+                    try {
+                        const response = await axios.post(`http://localhost:3000/approvedroprequest/${droprollno}`, {
+                    year: dropyear,
+                    sem: dropsem
+                }, {
+                    
+                });
+
+                        if (response.status === 200) {
+                            alert('Drop Request Approved!');
+                            viewAddedCourses(); // Refresh the course list
+                        }
+                    } catch (error) {
+                        if (error.response) {
+                            alert(error.response.data.message || 'Failed to approve. Please try again.');
+                        } else {
+                            alert('An error occurred. Please check your connection and try again.');
+                        }
+                    }
+                }
+            });
+        });
+    } catch (error) {
+        alert('Error approving drop request. Please try again.');
+        console.error(error);
+    }
+}
+
+
+
 function showStudentDetailsForm() {
     // Hide other sections and show the student details form
     document.getElementById('courseForm').style.display = 'none';
@@ -701,6 +872,8 @@ function showStudentDetailsForm() {
     document.getElementById('CGPAUploadForm').style.display = 'none';
     document.getElementById('CGPADetails').style.display = 'none';
     document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('studentDropDetails').style.display = 'none';
+    document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
     document.getElementById('studentDetailsForm').style.display = 'block';
 }
 async function fetchStudentDetails() {
@@ -708,6 +881,8 @@ async function fetchStudentDetails() {
     const year = document.getElementById('viewYear').value;
     const sem = document.getElementById('viewSemester').value;
     const registered_year = document.getElementById('viewRegisteredYear').value;
+    // const dropped = document.getElementById('dropped').value;
+    console.log(department, year, sem, registered_year)
     if (!department || !year || !sem || !registered_year) {
         alert('Please select all the fields.');
         return;
@@ -756,6 +931,83 @@ function downloadExcel() {
         const link = document.createElement('a');
         link.href = url;
         link.download = `RegisteredStudents.xlsx`;
+        link.click();
+        
+         // Redirect to the admin dashboard
+        
+    } else {
+        alert('No data available for download. Please fetch student details first.');
+    }
+}
+
+
+
+
+function viewDroppedStudentDetails() {
+    // Hide other sections and show the student details form
+    document.getElementById('courseForm').style.display = 'none';
+    document.getElementById('addedCourses').style.display = 'none';
+    document.getElementById('studentUploadForm').style.display = 'none';
+    document.getElementById('CGPAUploadForm').style.display = 'none';
+    document.getElementById('CGPADetails').style.display = 'none';
+    document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('studentDropDetails').style.display = 'none';
+    document.getElementById('DroppedStudentsDetailsForm').style.display = 'block';
+    document.getElementById('studentDetailsForm').style.display = 'none';
+}
+async function fetchDroppedStudentsDetails() {
+    const department = document.getElementById('viewDepartmentDrop').value;
+    const year = document.getElementById('viewYearDrop').value;
+    const sem = document.getElementById('viewSemesterDrop').value;
+    const dropped_year = document.getElementById('viewDroppedYear').value;
+    if (!department || !year || !sem || !dropped_year) {
+        alert('Please select all the fields.');
+        return;
+    }
+
+    try {
+        const response = await axios.post('http://localhost:3000/viewdroppedstudents', {
+            department,
+            year,
+            sem,
+            dropped_year
+        });
+        const droppedStudents = response.data;
+        if (!droppedStudents || droppedStudents.length === 0) {
+            // Alert if no data is found
+            alert('No details found.');
+            return;
+        }
+        console.log('Dropped Students data : ', droppedStudents);
+
+        // Prepare the Excel data but do not trigger the download yet
+        const worksheet = XLSX.utils.json_to_sheet(droppedStudents);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dropped Students');
+
+        // Store the workbook in a variable to use when the button is clicked
+        window.preparedWorkbook = workbook;
+
+        // Show the download button
+        const downloadDropButton = document.getElementById('downloadDropButton');
+        if (downloadDropButton) {
+            downloadDropButton.style.display = 'inline-block'; // Show the button
+        }
+    } catch (error) {
+        console.error('Error fetching student details:', error);
+        alert('Failed to fetch student details. Please try again.');
+    }
+}
+
+// Add a separate function for downloading the Excel file
+function downloadDroppedDetailsExcel() {
+    if (window.preparedWorkbook) {
+        const excelBuffer = XLSX.write(window.preparedWorkbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `DroppedStudents.xlsx`;
         link.click();
         
          // Redirect to the admin dashboard
