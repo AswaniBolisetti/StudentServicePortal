@@ -2,46 +2,61 @@ const mysql = require('mysql2');
 
 // Configure MySQL connection
 const db = mysql.createConnection({
-  host: 'localhost',      // Your MySQL server address (e.g., localhost)
-  user: 'root',           // MySQL username
-  password: 'aswanib',    // MySQL password
-  database: 'honors_registration' // Your MySQL database name
+  host: 'localhost',      
+  user: 'root',           
+  password: 'aswanib',    
+  database: 'honors_registration' 
 });
 
-exports.getCoursesController =(req, res) => { 
-      const { year, sem, rollNumber } = req.query; // Access query parameters
-  
-      if (!year || !sem) {
-        return res.status(400).send('Missing required query parameters: year and sem');
-      }
-      const getDepartmentQuery = 'SELECT department FROM students WHERE rollNo = ?';
+exports.getCoursesController = (req, res) => { 
+    const { year, sem, rollNumber, trackCourse } = req.query; 
+    console.log("Selected track is: " + trackCourse);
 
-      db.query(getDepartmentQuery, [rollNumber], (err, results) => {
+    if (!year || !sem) {
+        return res.status(400).send('Missing required query parameters: year and sem');
+    }
+
+    const getDepartmentQuery = 'SELECT department FROM students WHERE rollNo = ?';
+
+    db.query(getDepartmentQuery, [rollNumber], (err, results) => {
         if (err) {
-          console.error('Error fetching department:', err);
-          return res.status(500).json({ message: 'Error fetching department' });
+            console.error('Error fetching department:', err);
+            return res.status(500).json({ message: 'Error fetching department' });
         }
-      
+
         if (results.length === 0) {
-          return res.status(404).json({ message: 'Student not found' });
+            return res.status(404).json({ message: 'Student not found' });
         }
-      
+
         const department = results[0].department;
-      const query = 'SELECT course_name, course_id FROM courses WHERE year = ? AND sem = ? AND department = ?';
-      db.query(query, [year, sem, department], (err, results) => {
-        if (err) {
-          console.error('Error fetching courses:', err);
-          return res.status(500).send('Internal Server Error');
-        }
-  
-        if (results.length === 0) {
-          return res.status(404).send('No courses found for the specified year and semester');
-        }
-  
-        // Send the fetched courses as the response
-        res.json(results);
-      });
+
+        // Query to get regular courses
+        const coursesQuery = 'SELECT course_name, course_id FROM courses WHERE year = ? AND sem = ? AND department = ?';
+
+        db.query(coursesQuery, [year, sem, department], (err, coursesResults) => {
+            if (err) {
+                console.error('Error fetching courses:', err);
+                return res.status(500).send('Internal Server Error');
+            }
+
+            let response = { courses: coursesResults };
+
+            // If trackCourse is provided, fetch track courses
+            if (trackCourse) {
+                const trackCoursesQuery = 'SELECT course_name, course_id FROM trackcourses WHERE trackCourseName = ?';
+
+                db.query(trackCoursesQuery, [trackCourse], (err, trackCoursesResults) => {
+                    if (err) {
+                        console.error('Error fetching track courses:', err);
+                        return res.status(500).send('Internal Server Error');
+                    }
+
+                    response.trackCourses = trackCoursesResults;
+                    res.json(response); // Send combined response
+                });
+            } else {
+                res.json(response); // Send only courses if trackCourse is not provided
+            }
+        });
     });
-    };
-  
-//   module.exports = getCoursesController;
+};

@@ -217,7 +217,12 @@
         <option value="Mech">Mech</option>
       </select>
     </div> -->
+   
 
+    <div class="form-section" id="trackSection" style="display: none;">
+      <label for="trackCourses">Track Courses:</label>
+      <select id="trackCourses"></select>
+  </div>
     
     <div class="form-section">
       <button type="button" id="fetchCoursesButton">Fetch Courses</button>
@@ -257,19 +262,84 @@
     document.getElementById('fetchCoursesButton').addEventListener('click', async () => {
   const year = document.getElementById('year').value;
   const sem = document.getElementById('sem').value;
-
-  if (!year || !sem) {
+  const trackSection = document.getElementById('trackSection');
+    const trackCoursesDropdown = document.getElementById('trackCourses');
+    if (!year || !sem) {
     alert('Please select both year and semester.');
     return;
   }
+    let selectedTrackCourse = '';
+
+    // Only read trackCourses if trackSection is visible
+    if (trackSection.style.display !== 'none') {
+        selectedTrackCourse = trackCoursesDropdown.options[trackCoursesDropdown.selectedIndex].text;
+        console.log("Track Course Selected: " + selectedTrackCourse);
+        let apiUrl = `http://localhost:3000/getCourses?year=${year}&sem=${sem}&rollNumber=${rollNumber}`;
+
+// Append track course to API call only if it's selected
+if (trackCoursesDropdown.style.display !== 'none' && selectedTrackCourse) {
+  apiUrl += `&trackCourse=${selectedTrackCourse}`;
+}
+console.log("Final API URL:", apiUrl);
 
   try {
+    // Replace with your API endpoint
+    if (selectedTrackCourse === "Select Track Course"){
+      alert("Please select the track")
+    }
+    else{
+     const response = await axios.get(apiUrl);
+   console.log('Course details: ' + response.data);
+   console.log(JSON.stringify(response.data, null, 2));
+   if (response.status === 200) {
+    alert('Courses fetched');
+
+    const { courses, trackCourses } = response.data; // Extract both arrays
+    const courseCheckboxes = document.getElementById('courseCheckboxes');
+
+    // Clear previous checkboxes
+    courseCheckboxes.innerHTML = '';
+
+    // Merge both arrays into a single list
+    const allCourses = [...courses, ...trackCourses];
+
+    // Populate new checkboxes
+    allCourses.forEach(course => {
+        const checkboxContainer = document.createElement('div');
+        checkboxContainer.className = 'form-check';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `course-${course.course_id}`;
+        checkbox.name = 'course';
+        checkbox.value = course.course_id;
+        checkbox.className = 'form-check-input';
+
+        const label = document.createElement('label');
+        label.htmlFor = `course-${course.course_id}`;
+        label.className = 'form-check-label';
+        label.textContent = `${course.course_id} - ${course.course_name}`;
+
+        checkboxContainer.appendChild(checkbox);
+        checkboxContainer.appendChild(label);
+        courseCheckboxes.appendChild(checkboxContainer);
+    });
+
+} else {
+      alert('Failed to fetch courses. Please try again.');
+    }}
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    alert('Error fetching courses. Please check the console for details.');
+  }
+    } else {
+      try {
     // Replace with your API endpoint
     const response = await axios.get(`http://localhost:3000/getCourses?year=${year}&sem=${sem}&rollNumber=${rollNumber}`);
     console.log('Course details: ' + response.data);
     if (response.status === 200) {
       alert('Courses fetched');
-      const courses = response.data;
+      const courses = response.data.courses;
       const courseCheckboxes = document.getElementById('courseCheckboxes');
       
       // Clear previous checkboxes
@@ -304,6 +374,9 @@
     console.error('Error fetching courses:', error);
     alert('Error fetching courses. Please check the console for details.');
   }
+    }
+
+  
 });
 document.getElementById('honorsForm').addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -492,6 +565,11 @@ document.getElementById('logout').addEventListener('click', function (e) {
 
             yearSelect.value = lastYear;
             semSelect.value = lastSem;
+            if ((yearSelect.value == 3 && semSelect.value == 2) || (yearSelect.value == 4 && semSelect.value == 1)) {
+              const trackCourseContainer = document.getElementById("trackSection");          
+              trackCourseContainer.style.display = 'block';
+              fetchTrackCourses(yearSelect.value, semSelect.value);
+                    }
         } else {
             console.error("No valid data received!");
             yearSelect.value = 3;
@@ -501,6 +579,30 @@ document.getElementById('logout').addEventListener('click', function (e) {
         console.error('Error fetching last registered data:', error);
         yearSelect.value = 3;
         semSelect.value = 1;
+    }
+    async function fetchTrackCourses(year, sem) {
+        try {
+            const trackResponse = await axios.get(`http://localhost:3000/getTrackCourses/${year}/${sem}/${rollNumber}`);
+            console.log("Track Courses:", trackResponse.data);
+
+            if (trackResponse.status === 200 && Array.isArray(trackResponse.data)) {
+                // Clear existing options
+                const trackCourseDropdown = document.getElementById('trackCourses');
+                trackCourseDropdown.innerHTML = '<option value="">Select Track Course</option>';
+
+                // Populate dropdown with track courses
+                trackResponse.data.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course.trackCourseName; // Assuming each course has a course_id
+                    option.textContent = course.trackCourseName; // Assuming each course has a course_name
+                    trackCourseDropdown.appendChild(option);
+                });
+            } else {
+                console.error("No track courses found.");
+            }
+        } catch (error) {
+            console.error('Error fetching track courses:', error);
+        }
     }
 });
 

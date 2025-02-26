@@ -12,8 +12,14 @@ const honorsRegController = require('./controllers/honorsRegController');
 const adminController = require('./controllers/adminController');
 const registrationController = require('./controllers/checkRegController');
 const courseController = require('./controllers/courseController');
+const trackCourseController = require('./controllers/trackCourseController');
+
 const viewCoursesController = require('./controllers/viewCoursesController');
+const viewTrackCoursesController = require('./controllers/viewTrackCoursesController');
+
 const deleteCourseController = require('./controllers/deleteCourseController');
+const deleteTrackCourseController = require('./controllers/deleteTrackCourseController');
+
 const approveDropReqController = require('./controllers/approveDropReqController');
 
 const getCourseController = require('./controllers/getCoursesController');
@@ -25,6 +31,7 @@ const dropRequestController = require('./controllers/dropReqController');
 
 const cors = require('cors');
 const getYearSemController = require('./controllers/getYearSemController');
+const getTrackCourseController = require('./controllers/getTrackCoursesController');
 // Route to insert users from Excel file
 
 app.use(cors());
@@ -58,8 +65,14 @@ app.post('/viewregisteredstudents', viewRegStudentsDetails.viewRegStudentsDetail
 app.post('/viewdroppedstudents', viewDroppedStudentsDetails.viewDroppedStudentsDetails)
 
 app.post('/viewcourses', viewCoursesController.viewCoursesController)
+app.post('/viewaddedtrackcourses', viewTrackCoursesController.viewTrackCoursesController)
+
 app.post('/addcourse', courseController.insertCourse);
+app.post('/addtrackcourse', trackCourseController.insertTrackCourse)
+
 app.get('/deletecourse/:courseId', deleteCourseController.deleteCourse);
+app.get('/deletetrackcourse/:courseId', deleteTrackCourseController.deleteTrackCourseController);
+
 app.post('/approvedroprequest/:droprollno', approveDropReqController.approveRequest);
 
 app.get('/registrations/:rollNumber', registrationController.checkRegistrationStatus);
@@ -74,6 +87,8 @@ app.post('/upload-users', userController.uploadStudentFile);
 app.post('/upload-cgpa', cgpaController.uploadCGPAFile);
 app.post('/registeredCourses/:rollNumber', viewRegCoursesController.registeredCoursesController);
 app.get('/getYearSem/:rollNumber', getYearSemController.getYearSemController);
+app.get('/getTrackCourses/:year/:sem/:rollNumber', getTrackCourseController.getTrackCourseController);
+
 
 // Example route to fetch data from MySQL
 app.get('/users', (req, res) => {

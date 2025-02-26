@@ -79,6 +79,38 @@
         #courseForm button:hover {
             background-color: #0056b3;
         }
+        #trackCourseForm {
+            margin: 0 auto;
+            display: none;
+            margin-top: 20px;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-width: 80%;
+            align-items: center;
+            box-shadow:  2px 10px 16px rgba(0, 0, 0, 0.1);
+            background-color: rgb(247, 247, 247);
+        }
+        #tackCourseForm label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        #trackCourseForm input, #trackCourseForm select, #trackCourseForm button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #trackCourseForm button {
+            background-color: #002854;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #trackCourseForm button:hover {
+            background-color: #0056b3;
+        }
         #addedCourses {
             display: none;
             margin-top: 20px;
@@ -176,6 +208,9 @@ table, th, td {
     <div class="button-container">
         <button onclick="showForm()">Add Course</button>
         <button onclick="viewAddedCourses()">View Added Courses</button>
+        <button onclick="showTrackForm()">Add Track Course</button>
+        <button onclick="viewAddedTrackCourses()">View Added Track Courses</button>
+
         <button onclick="addCGPA()" >Add CGPA Details</button>
         <button onclick="viewCGPA()">View CGPA Details</button>
         <button onclick="showStudentUpload()">Add Student Details</button>
@@ -185,6 +220,45 @@ table, th, td {
         <button onclick="viewDroppedStudentDetails()">View Dropped Students Details</button>
 
     </div>
+
+    <form id="trackCourseForm" style="display: none;" >
+        <label for="track-department">Department:</label>
+        <select id="track-department" name="track-department" required>
+            <option value="">Select Department</option>
+            <option value="CSE">CSE</option>
+            <option value="ECE">ECE</option>
+            <option value="EEE">EEE</option>
+            <option value="Mech">Mech</option>
+        </select>
+        <label for="track-year">Year:</label>
+<select id="track-year" name="track-year" required>
+    <option value="">Select Year</option>
+   
+    <option value="3">3</option>
+    <option value="4">4</option>
+</select>
+<label for="track-semester">Semester:</label>
+<select id="track-semester" name="track-semester" required>
+    <option value="">Select Semester</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    
+</select>
+        
+<label for="trackCourseName"> Track Course Name:</label>
+        <input type="text" id="trackCourseName" name="trackCourseName" placeholder="Ex : Data Science" required>
+
+
+
+        <label for="track-courseId">Course Code:</label>
+        <input type="text" id="track-courseId" name="track-courseId" placeholder="Ex : 20CST01" required>
+
+        <label for="track-courseName">Course Title:</label>
+        <input type="text" id="track-courseName" name="track-courseName" placeholder="Ex : Information Security" required>
+
+        <button type="submit">Add Track Course</button>
+    </form>
+
 
         <div class="add-course-container">
             <div class="form-wrapper">
@@ -249,6 +323,35 @@ table, th, td {
         </div>
 
     </div> 
+
+    <div id="addedTrackCourses" style="display: none;">
+        <p>Added Track courses:
+            <select id="trackDepartmentFilter" style="font-size: medium;" onchange="filterTrackCoursesByDepartment()">
+                <option value="">All Departments</option>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="EEE">EEE</option>
+                <option value="Mech">Mech</option>
+            </select>
+        </p>
+        <table id="trackCoursesTable">
+            <thead>
+                <tr>
+                    <th>Track Course Name</th>
+                    <th>Course ID</th>
+                    <th>Course Name</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Department</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Course data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
 
     <form id="studentUploadForm" style="display: none; padding: 2%;" enctype="multipart/form-data">
         <p>Example Format:</p>
@@ -426,6 +529,15 @@ table, th, td {
             row.style.display = selectedDept === '' || department === selectedDept ? '' : 'none';
         });
     }
+    function filterTrackCoursesByDepartment() {
+        const selectedDept = document.getElementById('trackDepartmentFilter').value;
+        const rows = document.querySelectorAll('#trackCoursesTable tbody tr');
+
+        rows.forEach(row => {
+            const department = row.cells[5].innerText;
+            row.style.display = selectedDept === '' || department === selectedDept ? '' : 'none';
+        });
+    }
 </script>
     <script>
 
@@ -466,7 +578,24 @@ table, th, td {
 };
 
         }
+        function showTrackForm() {
+            const form = document.getElementById('trackCourseForm');
+            const addedCourses = document.getElementById('addedCourses');
+            form.style.display = 'block';
+            addedCourses.style.display = 'none';
+            document.getElementById('studentUploadForm').style.display = 'none';
+            document.getElementById('studentDetails').style.display = 'none';
+            document.getElementById('studentDetailsForm').style.display = 'none';
+            document.getElementById('CGPADetails').style.display = 'none';
+            document.getElementById('CGPAUploadForm').style.display = 'none';
+            document.getElementById('courseForm').style.display = 'none';
 
+            document.getElementById('studentDropDetails').style.display = 'none';
+            document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+            document.getElementById('addedTrackCourses').style.display = 'none';
+
+            
+        }
         // Show the form
         function showForm() {
             const form = document.getElementById('courseForm');
@@ -480,6 +609,8 @@ table, th, td {
             document.getElementById('CGPAUploadForm').style.display = 'none';
             document.getElementById('studentDropDetails').style.display = 'none';
             document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+            document.getElementById('trackCourseForm').style.display = 'none';
+            document.getElementById('addedTrackCourses').style.display = 'none';
 
             
         }
@@ -492,6 +623,9 @@ function showStudentUpload() {
         document.getElementById('CGPADetails').style.display = 'none';
         document.getElementById('CGPAUploadForm').style.display = 'none';
         document.getElementById('studentDropDetails').style.display = 'none';
+        document.getElementById('trackCourseForm').style.display = 'none';
+        document.getElementById('addedTrackCourses').style.display = 'none';
+
         document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
 
     }
@@ -503,6 +637,9 @@ function showStudentUpload() {
         document.getElementById('studentDetails').style.display = 'none';
         document.getElementById('studentDetailsForm').style.display = 'none';
         document.getElementById('CGPADetails').style.display = 'none';
+        document.getElementById('trackCourseForm').style.display = 'none';
+        document.getElementById('addedTrackCourses').style.display = 'none';
+
         document.getElementById('CGPAUploadForm').style.display = 'block';
         document.getElementById('studentDropDetails').style.display = 'none';
         document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
@@ -514,6 +651,9 @@ function showStudentUpload() {
         document.getElementById('addedCourses').style.display = 'none';
         document.getElementById('studentUploadForm').style.display = 'none';
         document.getElementById('studentDetails').style.display = 'none';
+        document.getElementById('trackCourseForm').style.display = 'none';
+        document.getElementById('addedTrackCourses').style.display = 'none';
+
         document.getElementById('studentDetailsForm').style.display = 'none';
         document.getElementById('studentDropDetails').style.display = 'none';
         document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
@@ -522,6 +662,85 @@ function showStudentUpload() {
     }
 
       // Show added courses in table format
+
+      async function viewAddedTrackCourses() {
+    const form = document.getElementById('courseForm');
+    const addedCourses = document.getElementById('addedTrackCourses');
+    form.style.display = 'none';
+    addedCourses.style.display = 'block';
+    document.getElementById('studentUploadForm').style.display = 'none';
+    document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('studentDetailsForm').style.display = 'none';
+    document.getElementById('CGPADetails').style.display = 'none';
+    document.getElementById('trackCourseForm').style.display = 'none';
+    document.getElementById('addedCourses').style.display = 'none';
+
+    
+    document.getElementById('studentDropDetails').style.display = 'none';
+    document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
+
+    document.getElementById('CGPAUploadForm').style.display = 'none';
+
+    try {
+        const response = await axios.post('http://localhost:3000/viewaddedtrackcourses');
+        const trackcourses = response.data;
+
+        // Clear previous course data
+        const trackCoursesTableBody = document.getElementById('trackCoursesTable').getElementsByTagName('tbody')[0];
+        trackCoursesTableBody.innerHTML = '';
+
+        // Dynamically add courses to the table
+        trackcourses.forEach(trackcourse => {
+            const row = trackCoursesTableBody.insertRow();
+            row.innerHTML = `
+            <td>${trackcourse.trackCourseName}</td>
+                <td>${trackcourse.course_id}</td>
+                <td>${trackcourse.course_name}</td>
+                <td>${trackcourse.year}</td>
+                <td>${trackcourse.sem}</td>
+                <td>${trackcourse.department}</td>
+                <td> <button class="delete-track-btn" data-trackcourse-id="${trackcourse.course_id}">Delete</button> </td>
+            `;
+        });
+
+        // Attach delete event listener to each delete button
+        const deleteTrackButtons = document.querySelectorAll('.delete-track-btn');
+        deleteTrackButtons.forEach(button => { 
+            button.addEventListener('click', async function() {
+                const courseId = this.getAttribute('data-trackcourse-id');
+                // Show confirmation popup before deletion
+                const isConfirmed = window.confirm('Are you sure you want to delete this track course?');
+                
+                if (isConfirmed) {
+                    try {
+                        const response = await axios.get(`http://localhost:3000/deletetrackcourse/${courseId}`, {
+                            
+                        });
+
+                        if (response.status === 200) {
+                            alert('Course deleted successfully!');
+                            viewAddedTrackCourses(); // Refresh the course list
+                        }
+                    } catch (error) {
+                        if (error.response) {
+                            alert(error.response.data.message || 'Failed to delete course. Please try again.');
+                        } else {
+                            alert('An error occurred. Please check your connection and try again.');
+                        }
+                    }
+                }
+            });
+        });
+
+    } catch (error) {
+        alert('Error fetching courses. Please try again.');
+    }
+}
+
+
+
+
+
 // Show added courses in table format
 async function viewAddedCourses() {
     const form = document.getElementById('courseForm');
@@ -532,6 +751,9 @@ async function viewAddedCourses() {
     document.getElementById('studentDetails').style.display = 'none';
     document.getElementById('studentDetailsForm').style.display = 'none';
     document.getElementById('CGPADetails').style.display = 'none';
+    document.getElementById('trackCourseForm').style.display = 'none';
+    document.getElementById('addedTrackCourses').style.display = 'none';
+
     document.getElementById('studentDropDetails').style.display = 'none';
     document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
 
@@ -591,6 +813,41 @@ async function viewAddedCourses() {
         alert('Error fetching courses. Please try again.');
     }
 }
+
+document.getElementById('trackCourseForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const department = document.getElementById('track-department').value;
+            const trackCourseName = document.getElementById('trackCourseName').value
+            const course_id = document.getElementById('track-courseId').value;
+            const course_name = document.getElementById('track-courseName').value;
+            const year = document.getElementById('track-year').value;
+            const sem = document.getElementById('track-semester').value;
+            try {
+                const response = await axios.post('http://localhost:3000/addtrackcourse', {
+                    trackCourseName,
+                    course_name,
+                    course_id,
+                    department,
+                    year,
+                    sem
+                });
+
+                if (response.status === 200) {
+                    alert(response.data.message || 'Track course added successfully!');
+                    document.getElementById('trackCourseForm').reset();
+                }
+            } catch (error) {
+                if (error.response) {
+                    alert(error.response.data.message || 'Failed to add track course. Please try again.');
+                } else {
+                    alert('An error occurred. Please check your connection and try again.');
+                }
+            }
+        });
+        
+
+
 // Add course function
         document.getElementById('courseForm').addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -698,6 +955,8 @@ async function viewCGPA() {
 
     // Hide other sections
     document.getElementById('courseForm').style.display = 'none';
+    document.getElementById('trackCourseForm').style.display = 'none';
+document.getElementById('addedTrackCourses').style.display = 'none';
     document.getElementById('addedCourses').style.display = 'none';
     document.getElementById('CGPAUploadForm').style.display = 'none';
     document.getElementById('studentUploadForm').style.display = 'none';
@@ -748,10 +1007,12 @@ async function viewStudentDetails() {
     document.getElementById('courseForm').style.display = 'none';
     document.getElementById('studentDropDetails').style.display = 'none';
     document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
-
+    document.getElementById('addedTrackCourses').style.display = 'none';
     document.getElementById('addedCourses').style.display = 'none';
     document.getElementById('CGPAUploadForm').style.display = 'none';
     document.getElementById('CGPADetails').style.display = 'none';
+    document.getElementById('trackCourseForm').style.display = 'none';
+
     
     document.getElementById('studentUploadForm').style.display = 'none';
     document.getElementById('studentDetailsForm').style.display = 'none';
@@ -792,6 +1053,8 @@ async function viewStudentDropDetails() {
     document.getElementById('courseForm').style.display = 'none';
     document.getElementById('addedCourses').style.display = 'none';
     document.getElementById('CGPAUploadForm').style.display = 'none';
+    document.getElementById('trackCourseForm').style.display = 'none';
+    document.getElementById('addedTrackCourses').style.display = 'none';
     document.getElementById('studentDetails').style.display = 'none';
     document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
 
@@ -844,7 +1107,7 @@ async function viewStudentDropDetails() {
 
                         if (response.status === 200) {
                             alert('Drop Request Approved!');
-                            viewAddedCourses(); // Refresh the course list
+                             // Refresh the course list
                         }
                     } catch (error) {
                         if (error.response) {
@@ -872,6 +1135,8 @@ function showStudentDetailsForm() {
     document.getElementById('CGPAUploadForm').style.display = 'none';
     document.getElementById('CGPADetails').style.display = 'none';
     document.getElementById('studentDetails').style.display = 'none';
+    document.getElementById('trackCourseForm').style.display = 'none';
+    document.getElementById('addedTrackCourses').style.display = 'none';
     document.getElementById('studentDropDetails').style.display = 'none';
     document.getElementById('DroppedStudentsDetailsForm').style.display = 'none';
     document.getElementById('studentDetailsForm').style.display = 'block';
@@ -950,6 +1215,8 @@ function viewDroppedStudentDetails() {
     document.getElementById('studentUploadForm').style.display = 'none';
     document.getElementById('CGPAUploadForm').style.display = 'none';
     document.getElementById('CGPADetails').style.display = 'none';
+    document.getElementById('trackCourseForm').style.display = 'none';
+    document.getElementById('addedTrackCourses').style.display = 'none';
     document.getElementById('studentDetails').style.display = 'none';
     document.getElementById('studentDropDetails').style.display = 'none';
     document.getElementById('DroppedStudentsDetailsForm').style.display = 'block';
