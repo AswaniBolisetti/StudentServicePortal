@@ -32,6 +32,9 @@ const dropRequestController = require('./controllers/dropReqController');
 const cors = require('cors');
 const getYearSemController = require('./controllers/getYearSemController');
 const getTrackCourseController = require('./controllers/getTrackCoursesController');
+const getPrevTrackCourseController = require('./controllers/getPrevTrackCourseController');
+
+
 // Route to insert users from Excel file
 
 app.use(cors());
@@ -88,6 +91,8 @@ app.post('/upload-cgpa', cgpaController.uploadCGPAFile);
 app.post('/registeredCourses/:rollNumber', viewRegCoursesController.registeredCoursesController);
 app.get('/getYearSem/:rollNumber', getYearSemController.getYearSemController);
 app.get('/getTrackCourses/:year/:sem/:rollNumber', getTrackCourseController.getTrackCourseController);
+app.get('/getPrevTrackCourse/:year/:sem/:rollNumber', getPrevTrackCourseController.getPrevTrackCourse);
+
 
 
 // Example route to fetch data from MySQL

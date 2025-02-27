@@ -191,12 +191,101 @@ table, th, td {
             box-shadow:  2px 10px 16px rgba(0, 0, 0, 0.1);
             background-color: rgb(247, 247, 247);
             font-size: 20px;
-    }
+    } .styled-button1 {
+    background: #001f41; /* Orange to Yellow Gradient */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    /* font-size: 16px; */
+    /* font-weight: bold; */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  .styled-button1:hover {
+    background: linear-gradient(to right, rgb(0, 11, 97),rgb(10, 0, 204)); /* Darker shade on hover */
+  }
+  .styled-button2 {
+    background: #001f41;
+     color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    /* font-size: 16px; */
+    /* font-weight: bold; */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  .styled-button2:hover {
+    background: linear-gradient(to right, rgb(98, 125, 1),rgb(156, 200, 0)); /* Darker shade on hover */
+  }
+  .styled-button3 {
+    background: #001f41;
+     color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    /* font-size: 16px; */
+    /* font-weight: bold; */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  .styled-button3:hover {
+    background: linear-gradient(to right, rgb(10, 117, 119), rgb(35, 195, 234)); /* Darker shade on hover */
+  }
+  .styled-button4 {
+    background: #001f41;
+     color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    /* font-size: 16px; */
+    /* font-weight: bold; */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  .styled-button4:hover {
+    background: linear-gradient(to right, rgb(1, 111, 16),rgb(10, 170, 42)); /* Darker shade on hover */
+  }
+  .styled-button5 {
+    background: #001f41;
+       color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    /* font-size: 16px; */
+    /* font-weight: bold; */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  .styled-button5:hover {
+    background: linear-gradient(to right, rgb(0, 98, 70),rgb(2, 213, 192)); /* Darker shade on hover */
+  }
+  .styled-button6 {
+    background: #001f41;
+       color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    /* font-size: 16px; */
+    /* font-weight: bold; */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  .styled-button6:hover {
+    background: linear-gradient(to right, rgb(97, 0, 52),rgb(168, 2, 145)); /* Darker shade on hover */
+  }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Admin Dashboard</h1>
+        <h1 style="color: #001f41;">Admin Dashboard(SoET, SPMVV)</h1>
         <div class="profile-menu">
             <i class="fas fa-user-circle profile-icon" onclick="toggleDropdown()"></i>
             <div class="dropdown-menu" id="dropdownMenu">
@@ -206,18 +295,18 @@ table, th, td {
     </div>
 
     <div class="button-container">
-        <button onclick="showForm()">Add Course</button>
-        <button onclick="viewAddedCourses()">View Added Courses</button>
-        <button onclick="showTrackForm()">Add Track Course</button>
-        <button onclick="viewAddedTrackCourses()">View Added Track Courses</button>
+        <button onclick="showForm();" class="styled-button1">Add Course</button>
+        <button onclick="viewAddedCourses()" class="styled-button1">View Added Courses</button>
+        <button onclick="showTrackForm()" class="styled-button2">Add Track Course</button>
+        <button onclick="viewAddedTrackCourses()" class="styled-button2">View Added Track Courses</button>
 
-        <button onclick="addCGPA()" >Add CGPA Details</button>
-        <button onclick="viewCGPA()">View CGPA Details</button>
-        <button onclick="showStudentUpload()">Add Student Details</button>
-        <button onclick="viewStudentDetails()">View Student Details</button>
-        <button onclick="showStudentDetailsForm()">View Registered Student Details</button>
-        <button onclick="viewStudentDropDetails()">Drop Requests</button>
-        <button onclick="viewDroppedStudentDetails()">View Dropped Students Details</button>
+        <button onclick="addCGPA()" class="styled-button3">Add CGPA Details</button>
+        <button onclick="viewCGPA()" class="styled-button3">View CGPA Details</button>
+        <button onclick="showStudentUpload()" class="styled-button4">Add Student Details</button>
+        <button onclick="viewStudentDetails()" class="styled-button4">View Student Details</button>
+        <button onclick="showStudentDetailsForm()" class="styled-button5">View Registered Student Details</button>
+        <button onclick="viewStudentDropDetails()" class="styled-button6">Drop Requests</button>
+        <button onclick="viewDroppedStudentDetails()" class="styled-button6">View Dropped Students Details</button>
 
     </div>
 
@@ -599,6 +688,7 @@ table, th, td {
         // Show the form
         function showForm() {
             const form = document.getElementById('courseForm');
+            
             const addedCourses = document.getElementById('addedCourses');
             form.style.display = 'block';
             addedCourses.style.display = 'none';

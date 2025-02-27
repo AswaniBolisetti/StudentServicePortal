@@ -65,7 +65,7 @@ function verifyToken(req, res) {
 
 // Controller to insert honors registration data
 exports.registerHonors = async (req, res) => {
-  const { rollNumber, year, sem, courses } = req.body; // Assuming 'courses' is an array of { course_id, course_name }
+  const { rollNumber, year, sem, courses, trackCourse } = req.body; // Assuming 'courses' is an array of { course_id, course_name }
 
   if (!rollNumber || !year || !sem || !courses || courses.length === 0) {
     return res.status(400).json({ message: 'All fields are required and at least one course must be selected' });
@@ -101,13 +101,13 @@ exports.registerHonors = async (req, res) => {
     const currentYear = new Date().getFullYear();
     const department = results[0].department;
 
-    const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, course_id, course_name, department, current_year) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const insertHonorsQuery = 'INSERT INTO registrations (student_id, year, sem, course_id, course_name, department, current_year, trackcourse) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     
     // Convert the courses to JSON format
     const courseIds = JSON.stringify(courses.map(course => course.course_id));
     const courseNames = JSON.stringify(courses.map(course => course.course_name));
 
-    db.query(insertHonorsQuery, [rollNumber, year, sem, courseIds, courseNames, department, currentYear], (err, insertResults) => {
+    db.query(insertHonorsQuery, [rollNumber, year, sem, courseIds, courseNames, department, currentYear, trackCourse], (err, insertResults) => {
       if (err) {
         console.error('Error inserting honors registration data:', err);
         return res.status(500).json({ message: 'Error inserting honors registration data' });

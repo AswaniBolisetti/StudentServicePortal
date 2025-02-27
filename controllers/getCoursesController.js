@@ -43,9 +43,9 @@ exports.getCoursesController = (req, res) => {
 
             // If trackCourse is provided, fetch track courses
             if (trackCourse) {
-                const trackCoursesQuery = 'SELECT course_name, course_id FROM trackcourses WHERE trackCourseName = ?';
+                const trackCoursesQuery = 'SELECT course_name, course_id FROM trackcourses WHERE trackCourseName = ? and sem = ? and year = ?';
 
-                db.query(trackCoursesQuery, [trackCourse], (err, trackCoursesResults) => {
+                db.query(trackCoursesQuery, [trackCourse, sem, year], (err, trackCoursesResults) => {
                     if (err) {
                         console.error('Error fetching track courses:', err);
                         return res.status(500).send('Internal Server Error');

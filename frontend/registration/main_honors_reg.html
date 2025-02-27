@@ -383,6 +383,7 @@ document.getElementById('honorsForm').addEventListener('submit', async (event) =
 
   const year = document.getElementById('year').value;
   const sem = document.getElementById('sem').value;
+  const trackCourse = document.getElementById("")
   const selectedCourses = Array.from(document.querySelectorAll('input[name="course"]:checked'))
     .map(checkbox => ({
       course_id: checkbox.value,
@@ -402,12 +403,25 @@ document.getElementById('honorsForm').addEventListener('submit', async (event) =
 
   const token = sessionStorage.getItem('userToken');
 
+  const trackSection = document.getElementById('trackSection');
+    const trackCoursesDropdown = document.getElementById('trackCourses');
+    
+    let selectedTrackCourse = '';
+
+    // Only read trackCourses if trackSection is visible
+    if (trackSection.style.display !== 'none') {
+        selectedTrackCourse = trackCoursesDropdown.options[trackCoursesDropdown.selectedIndex].text;
+        console.log("Track Course Selected: " + selectedTrackCourse);
+       
+    }
+
   try {
     const response = await axios.post('http://localhost:3000/registerHonors', {
       rollNumber,
       year,
       sem,
-      courses: selectedCourses
+      courses: selectedCourses,
+      trackCourse: selectedTrackCourse || null
     }, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -581,6 +595,35 @@ document.getElementById('logout').addEventListener('click', function (e) {
         semSelect.value = 1;
     }
     async function fetchTrackCourses(year, sem) {
+      if (year == 4 & sem == 1){
+        console.log("hii")
+        year = 3;
+        sem = 2;
+        //fetching previous track course with year = 3 and sem = 2 then fill in the dropdown
+        try {
+        const prevTrackCourse = await axios.get(`http://localhost:3000/getPrevTrackCourse/${year}/${sem}/${rollNumber}`);
+        console.log("Track Courses prev:", prevTrackCourse.data);
+        if (prevTrackCourse.status === 200 && Array.isArray(prevTrackCourse.data)) {
+                // Clear existing options
+                const trackCourseDropdown = document.getElementById('trackCourses');
+                trackCourseDropdown.innerHTML = '<option value="">Select Track Course</option>';
+
+                // Populate dropdown with track courses
+                prevTrackCourse.data.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course.trackcourse; // Assuming each course has a course_id
+                    option.textContent = course.trackcourse; // Assuming each course has a course_name
+                    trackCourseDropdown.appendChild(option);
+                });
+            } else {
+                console.error("No track courses found.");
+            }
+        }
+        catch (error) {
+            console.error('Error fetching track courses:', error);
+        }
+      }
+      else{
         try {
             const trackResponse = await axios.get(`http://localhost:3000/getTrackCourses/${year}/${sem}/${rollNumber}`);
             console.log("Track Courses:", trackResponse.data);
@@ -603,6 +646,7 @@ document.getElementById('logout').addEventListener('click', function (e) {
         } catch (error) {
             console.error('Error fetching track courses:', error);
         }
+      }
     }
 });
 
