@@ -13,6 +13,7 @@ const adminController = require('./controllers/adminController');
 const registrationController = require('./controllers/checkRegController');
 const courseController = require('./controllers/courseController');
 const trackCourseController = require('./controllers/trackCourseController');
+const deleteStudentDataController = require('./controllers/deleteStudentDataController');
 
 const viewCoursesController = require('./controllers/viewCoursesController');
 const viewTrackCoursesController = require('./controllers/viewTrackCoursesController');
@@ -70,6 +71,7 @@ app.post('/viewdroppedstudents', viewDroppedStudentsDetails.viewDroppedStudentsD
 app.post('/viewcourses', viewCoursesController.viewCoursesController)
 app.post('/viewaddedtrackcourses', viewTrackCoursesController.viewTrackCoursesController)
 
+app.post('/deletestudentdataall', deleteStudentDataController.deleteStudentData);
 app.post('/addcourse', courseController.insertCourse);
 app.post('/addtrackcourse', trackCourseController.insertTrackCourse)
 

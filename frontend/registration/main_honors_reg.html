@@ -174,7 +174,8 @@
       <i class="fas fa-user-circle fa-2x" id="profileIcon"></i>
       <div class="dropdown-menu" id="dropdownMenu">
         <a href="profile.html" id="viewProfile">View Profile</a>
-        <a href="#" id="viewRegisteredCourses">Registered Courses</a>
+        <a href="#" id="viewRegisteredCourses">View Registered Courses</a>
+        <a href="#" id="dropHonorsBtn" >Drop From Honors</a>
         <a href="#" id="logout">Logout</a>
       </div>
     </div>
@@ -550,6 +551,40 @@ document.getElementById('logout').addEventListener('click', function (e) {
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script>
+    document.getElementById('dropHonorsBtn').addEventListener('click', async () => {
+      const confirmDrop = window.confirm("Are you sure you want to drop from honors?");
+    if (!confirmDrop) return;
+    try {
+      const response = await axios.get(`http://localhost:3000/getYearSem/${rollNumber}`);
+        console.log("Fetched Data for drop:", response.data);
+        if(response.data.length === 0){
+          alert("You haven't registered for any course till now, so no need to drop!")
+          return
+        }
+        const drop_year = response.data[0].year;
+        const drop_semester = response.data[0].sem;
+       
+        console.log("year and sem for drop : " + drop_semester, drop_year)
+    
+        const dropResponse = await axios.post('http://localhost:3000/droprequest', {
+          rollNumber,
+         drop_semester,
+          drop_year
+        });
+        if (dropResponse.status === 200) {
+      alert('Drop request has been sent, wait for approval');
+
+    } else {
+      alert('Failed to drop from honors.');
+    }
+    }
+    catch (error) {
+      console.error('Error dropping from honors:', error);
+      alert('You have already sent the request');
+    }
+  });
+   
+
   document.addEventListener('DOMContentLoaded', async () => {
     const yearSelect = document.getElementById('year');
     const semSelect = document.getElementById('sem');

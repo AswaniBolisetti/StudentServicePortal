@@ -136,7 +136,8 @@
       <i class="fas fa-user-circle fa-2x" id="profileIcon"></i>
       <div class="dropdown-menu" id="dropdownMenu">
         <a href="profile.html" id="viewProfile">View Profile</a>
-        <a href="#" id="viewRegisteredCourses">Registered Courses</a>
+        <a href="#" id="viewRegisteredCourses">View Registered Courses</a>
+        <a href="#" id="dropHonorsBtn" >Drop From Honors</a>
         <a href="#" id="logout">Logout</a>
       </div>
     </div>
@@ -287,7 +288,39 @@ viewRegisteredCourses.onclick = async function (e) {
   }
 };
 
+document.getElementById('dropHonorsBtn').addEventListener('click', async () => {
+  const confirmDrop = window.confirm("Are you sure you want to drop from honors?");
+    if (!confirmDrop) return;
+    try {
+      const response = await axios.get(`http://localhost:3000/getYearSem/${rollNumber}`);
+        console.log("Fetched Data for drop:", response.data);
+        if(response.data.length === 0){
+          alert("You haven't registered for any course till now, so no need to drop!")
+          return
+        }
+        const drop_year = response.data[0].year;
+        const drop_semester = response.data[0].sem;
+       
+        console.log("year and sem for drop : " + drop_semester, drop_year)
+    
+        const dropResponse = await axios.post('http://localhost:3000/droprequest', {
+          rollNumber,
+         drop_semester,
+          drop_year
+        });
+        if (dropResponse.status === 200) {
+      alert('Drop request has been sent, wait for approval');
 
+    } else {
+      alert('Failed to drop from honors.');
+    }
+    }
+    catch (error) {
+      console.error('Error dropping from honors:', error);
+      alert('You have already sent the request');
+    }
+  });
+   
   </script>
  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
