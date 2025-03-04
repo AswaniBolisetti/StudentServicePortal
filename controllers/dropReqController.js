@@ -1,5 +1,4 @@
 const mysql = require('mysql2');
-const jwt = require('jsonwebtoken');
 
 // Configure MySQL connection
 const db = mysql.createConnection({
@@ -20,35 +19,53 @@ exports.dropRequest = async (req, res) => {
     return res.status(400).json({ message: 'All fields are required to drop' });
   }
 
-  // Fetch name and department from students table
+  // Fetch student details from students table
   const getStudentQuery = `SELECT name, department FROM students WHERE rollNo = ?`;
 
-  db.query(getStudentQuery, [rollNumber], (err, results) => {
+  db.query(getStudentQuery, [rollNumber], (err, studentResults) => {
     if (err) {
       console.error('Error fetching student details:', err);
       return res.status(500).json({ message: 'Error fetching student details' });
     }
 
-    if (results.length === 0) {
+    if (studentResults.length === 0) {
       return res.status(404).json({ message: 'Student not found' });
     }
 
-    const { name, department } = results[0];
-    const currentYear = new Date().getFullYear();
+    const { name, department } = studentResults[0];
 
-    // Insert drop request
-    const insertDropRequestQuery = `
-      INSERT INTO droprequests (rollNo, year, sem, current_year, department, name) 
-      VALUES (?, ?, ?, ?, ?, ?)
+    // Fetch passout_year from registrations table
+    const getPassoutYearQuery = `
+      SELECT passout_year FROM registrations 
+      WHERE student_id = ? AND year = ? AND sem = ?
     `;
 
-    db.query(insertDropRequestQuery, [rollNumber, drop_year, drop_semester, currentYear, department, name], (err, result) => {
+    db.query(getPassoutYearQuery, [rollNumber, drop_year, drop_semester], (err, regResults) => {
       if (err) {
-        console.error('Error inserting drop request:', err);
-        return res.status(500).json({ message: 'Error inserting drop request' });
+        console.error('Error fetching passout year:', err);
+        return res.status(500).json({ message: 'Error fetching passout year' });
       }
 
-      return res.status(200).json({ message: 'Drop request submitted successfully' });
+      if (regResults.length === 0) {
+        return res.status(404).json({ message: 'No registration record found for the given details' });
+      }
+
+      const { passout_year } = regResults[0];
+
+      // Insert drop request with passout_year
+      const insertDropRequestQuery = `
+        INSERT INTO droprequests (rollNo, year, sem, current_year, department, name) 
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+      db.query(insertDropRequestQuery, [rollNumber, drop_year, drop_semester, passout_year, department, name], (err, result) => {
+        if (err) {
+          console.error('Error inserting drop request:', err);
+          return res.status(500).json({ message: 'Error inserting drop request' });
+        }
+
+        return res.status(200).json({ message: 'Drop request submitted successfully' });
+      });
     });
   });
 };

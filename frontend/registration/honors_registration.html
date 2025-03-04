@@ -174,10 +174,44 @@
      
     }
 
-    const registerButton = document.getElementById('registerButton');
-    registerButton.addEventListener('click', async () => {
-      window.location.href = './main_honors_reg.html';
-    });
+    // const registerButton = document.getElementById('registerButton');
+    // registerButton.addEventListener('click', async () => {
+      
+    //   window.location.href = './main_honors_reg.html';
+    // });
+
+
+    const registerButton = document.getElementById("registerButton");
+registerButton.addEventListener("click", async () => {
+   // Replace with the actual roll number
+
+  try {
+    const response = await axios.post(`http://localhost:3000/lastRegisteredMonth/${rollNumber}`);
+    const lastRegisteredDate = response.data.lastRegisteredDate;
+
+    if (!lastRegisteredDate) {
+      // No prior registration, allow first-time registration
+      window.location.href = "./main_honors_reg.html";
+      return;
+    }
+
+    const lastDate = new Date(lastRegisteredDate);
+    const threeMonthsLater = new Date(lastDate);
+    threeMonthsLater.setMonth(threeMonthsLater.getMonth() + 3);
+
+    if (new Date() >= threeMonthsLater) {
+      window.location.href = "./main_honors_reg.html"; // Allow registration
+    } else {
+      alert("You can register only one time per semester, come next semester.");
+    }
+  } catch (error) {
+    console.error("Error checking eligibility:", error);
+    alert("Something went wrong. Please try again.");
+  }
+});
+
+
+
     const modal = document.getElementById('coursesModal');
     const viewRegisteredCourses = document.getElementById('viewRegisteredCourses');
     const closeModal = document.getElementById('closeModal');

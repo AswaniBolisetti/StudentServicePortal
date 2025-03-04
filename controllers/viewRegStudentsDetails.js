@@ -18,7 +18,7 @@ exports.viewRegStudentsDetails = async (req, res) => {
         SELECT r.student_id, s.name, r.year, r.sem, r.department
         FROM registrations r
         JOIN students s ON r.student_id = s.rollNo
-        WHERE r.department = ? AND r.year = ? AND r.sem = ? AND r.current_year = ? AND trackcourse = ? AND dropped_status = 0 
+        WHERE r.department = ? AND r.year = ? AND r.sem = ? AND r.passout_year = ? AND trackcourse = ? AND dropped_status = 0 
     `;
     db.query(query,[department, year, sem, registered_year, track_name_formatted], (err, results) => {
         if (err) {
@@ -35,7 +35,7 @@ exports.viewRegStudentsDetails = async (req, res) => {
         SELECT r.student_id, s.name, r.year, r.sem, r.department
         FROM registrations r
         JOIN students s ON r.student_id = s.rollNo
-        WHERE r.department = ? AND r.year = ? AND r.sem = ? AND r.current_year = ? AND dropped_status = 0 
+        WHERE r.department = ? AND r.year = ? AND r.sem = ? AND r.passout_year = ? AND dropped_status = 0 
     `;
     db.query(query,[department, year, sem, registered_year], (err, results) => {
         if (err) {

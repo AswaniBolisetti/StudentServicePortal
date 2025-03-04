@@ -15,7 +15,7 @@ exports.viewDroppedStudentsDetails = async (req, res) => {
   // Query to fetch registered courses based on rollNumber
   
   const query = `
-       SELECT rollNo, Name from 
+       SELECT rollNo, Name, year, sem, department from 
        droprequests where year = ? and sem = ? 
        and department = ? and status = 1 and
         current_year = ?

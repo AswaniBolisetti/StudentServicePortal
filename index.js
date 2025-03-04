@@ -14,7 +14,7 @@ const registrationController = require('./controllers/checkRegController');
 const courseController = require('./controllers/courseController');
 const trackCourseController = require('./controllers/trackCourseController');
 const deleteStudentDataController = require('./controllers/deleteStudentDataController');
-
+const lastRegMonth = require('./controllers/lastRegMonthController');
 const viewCoursesController = require('./controllers/viewCoursesController');
 const viewTrackCoursesController = require('./controllers/viewTrackCoursesController');
 
@@ -83,6 +83,7 @@ app.get('/deletecourse/:courseId', deleteCourseController.deleteCourse);
 app.get('/deletetrackcourse/:courseId', deleteTrackCourseController.deleteTrackCourseController);
 
 app.post('/approvedroprequest/:droprollno', approveDropReqController.approveRequest);
+app.post("/lastRegisteredMonth/:rollNumber", lastRegMonth.lastRegMonth);
 
 app.get('/registrations/:rollNumber', registrationController.checkRegistrationStatus);
 app.post('/adminLogin', adminController.adminLogin);
