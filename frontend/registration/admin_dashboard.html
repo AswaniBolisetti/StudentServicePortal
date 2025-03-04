@@ -549,7 +549,7 @@ table, th, td {
                     <th>Roll No</th>
                     <th>Name</th>
                     <th>CGPA</th>
-
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -657,6 +657,8 @@ table, th, td {
     
             <div style="display: flex; flex-direction: column;">
                 <button type="button" onclick="fetchStudentDetails()" style="padding: 10px 15px; background-color: #002b59; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;">Check</button>
+                <button id="viewDataButton" style="display: none; padding: 10px 15px; background-color: #004085; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;" onclick="viewData()">View Data</button>
+
                 <button id="downloadButton" style="display: none; padding: 10px 15px; background-color: #001f41; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px;" onclick="downloadExcel()">Download</button>
             </div>
         </form>
@@ -1175,9 +1177,37 @@ document.getElementById('addedTrackCourses').style.display = 'none';
                 <td>${student.username}</td>
                 <td>${student.Name}</td>
                 <td>${student.CGPA}</td>
-
+      <td> <button class="delete-cgpa-btn" data-cgpa-id="${student.username}">Delete</button> </td>
+           
                 
             `;
+        });
+        const deleteCGPAButtons = document.querySelectorAll('.delete-cgpa-btn');
+        deleteCGPAButtons.forEach(button => { 
+            button.addEventListener('click', async function() {
+                const student_id = this.getAttribute('data-cgpa-id');
+                // Show confirmation popup before deletion
+                const isConfirmed = window.confirm('Are you sure you want to delete this user details?');
+                
+                if (isConfirmed) {
+                    try {
+                        const response = await axios.get(`http://localhost:3000/deleteuser/${student_id}`, {
+                            
+                        });
+
+                        if (response.status === 200) {
+                            alert('user deleted successfully!');
+                            viewCGPA(); // Refresh the course list
+                        }
+                    } catch (error) {
+                        if (error.response) {
+                            alert(error.response.data.message || 'Failed to delete user. Please try again.');
+                        } else {
+                            alert('An error occurred. Please check your connection and try again.');
+                        }
+                    }
+                }
+            });
         });
     } catch (error) {
         alert('Error fetching student details. Please try again.');
@@ -1392,11 +1422,23 @@ async function fetchStudentDetails() {
     const track_name_formatted = formatTrackName(track_name);
     console.log(track_name_formatted);
     // const dropped = document.getElementById('dropped').value;
+    
     console.log(department, year, sem, registered_year)
     if (!department || !year || !sem || !registered_year) {
         alert('Please select all the fields.');
         return;
     }
+    
+
+    const trackDisplay = document.getElementById('track-display');
+    if(trackDisplay.style.display == "block"){
+        if (!track_name_formatted) {
+        alert('Please select all the fields.');
+        return;
+    }
+    }
+// Show only when (year == 3 and sem == 2) OR (year == 4 and sem == 1)
+
 
     try {
         const response = await axios.post('http://localhost:3000/viewregisteredstudents', {
@@ -1413,7 +1455,7 @@ async function fetchStudentDetails() {
             return;
         }
         console.log('Registered Students data : ', registeredStudents);
-
+        window.preparedData = registeredStudents;
         // Prepare the Excel data but do not trigger the download yet
         const worksheet = XLSX.utils.json_to_sheet(registeredStudents);
         const workbook = XLSX.utils.book_new();
@@ -1424,12 +1466,40 @@ async function fetchStudentDetails() {
 
         // Show the download button
         const downloadButton = document.getElementById('downloadButton');
+        document.getElementById('viewDataButton').style.display = 'inline-block';
         if (downloadButton) {
             downloadButton.style.display = 'inline-block'; // Show the button
         }
     } catch (error) {
         console.error('Error fetching student details:', error);
         alert('Failed to fetch student details. Please try again.');
+    }
+}
+function viewData() {
+    if (window.preparedData && window.preparedData.length > 0) {
+        const newTab = window.open();
+        let html = `<html><head><title>Registered Students</title></head><body>`;
+        html += `<h2 style="text-align:center;">Registered Students Details</h2>`;
+        html += `<table border="1" style="width:100%; border-collapse: collapse; text-align:center;">`;
+        
+        // Generate table headers
+        const keys = Object.keys(window.preparedData[0]);
+        html += `<tr style="background-color:#004085; color:white;">`;
+        keys.forEach(key => html += `<th style="padding: 8px;">${key}</th>`);
+        html += `</tr>`;
+
+        // Generate table rows
+        window.preparedData.forEach(student => {
+            html += `<tr>`;
+            keys.forEach(key => html += `<td style="padding: 8px;">${student[key]}</td>`);
+            html += `</tr>`;
+        });
+
+        html += `</table></body></html>`;
+        newTab.document.write(html);
+        newTab.document.close();
+    } else {
+        alert('No data available to view. Please fetch student details first.');
     }
 }
 

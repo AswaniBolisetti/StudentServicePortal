@@ -15,7 +15,7 @@ exports.viewRegStudentsDetails = async (req, res) => {
   // Query to fetch registered courses based on rollNumber
     if(track_name_formatted){
         const query = `
-        SELECT r.student_id, s.name
+        SELECT r.student_id, s.name, r.year, r.sem, r.department
         FROM registrations r
         JOIN students s ON r.student_id = s.rollNo
         WHERE r.department = ? AND r.year = ? AND r.sem = ? AND r.current_year = ? AND trackcourse = ? AND dropped_status = 0 
@@ -32,7 +32,7 @@ exports.viewRegStudentsDetails = async (req, res) => {
     }
     else{
   const query = `
-        SELECT r.student_id, s.name
+        SELECT r.student_id, s.name, r.year, r.sem, r.department
         FROM registrations r
         JOIN students s ON r.student_id = s.rollNo
         WHERE r.department = ? AND r.year = ? AND r.sem = ? AND r.current_year = ? AND dropped_status = 0 

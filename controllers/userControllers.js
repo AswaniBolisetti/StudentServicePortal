@@ -15,7 +15,7 @@ const db = mysql.createConnection({
 const upload = multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            const uploadPath = path.join(__dirname);
+            const uploadPath = path.join(__dirname, 'usersData');
             cb(null, uploadPath);
         },
         filename: (req, file, cb) => {
@@ -34,7 +34,7 @@ exports.uploadStudentFile = (req, res) => {
             return res.status(500).send({ message: 'Error uploading file' });
         }
 
-        const filePath = path.join(__dirname, req.file.filename);
+        const filePath = path.join(__dirname, 'usersData', req.file.filename);
 
         // Call the function to insert data into the database
         exports.insertUsersFromExcel({ filePath }, res);

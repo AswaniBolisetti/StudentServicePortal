@@ -18,6 +18,8 @@ const deleteStudentDataController = require('./controllers/deleteStudentDataCont
 const viewCoursesController = require('./controllers/viewCoursesController');
 const viewTrackCoursesController = require('./controllers/viewTrackCoursesController');
 
+const deleteUserController = require('./controllers/deleteUserController');
+
 const deleteCourseController = require('./controllers/deleteCourseController');
 const deleteTrackCourseController = require('./controllers/deleteTrackCourseController');
 
@@ -74,6 +76,8 @@ app.post('/viewaddedtrackcourses', viewTrackCoursesController.viewTrackCoursesCo
 app.post('/deletestudentdataall', deleteStudentDataController.deleteStudentData);
 app.post('/addcourse', courseController.insertCourse);
 app.post('/addtrackcourse', trackCourseController.insertTrackCourse)
+
+app.get('/deleteuser/:student_id', deleteUserController.deleteUser);
 
 app.get('/deletecourse/:courseId', deleteCourseController.deleteCourse);
 app.get('/deletetrackcourse/:courseId', deleteTrackCourseController.deleteTrackCourseController);
