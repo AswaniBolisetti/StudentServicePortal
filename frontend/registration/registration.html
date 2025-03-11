@@ -87,7 +87,22 @@ background-color: white;
     display: block;
     margin-bottom: 5px;
   }
-
+#department{
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+  outline: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+#department:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Box shadow on focus */
+}
   input {
   width: 100%;
   padding: 8px;
@@ -609,19 +624,32 @@ input:focus {
         <br><br>
 
         <label for="department">Department:</label>
-        <input type="text" id="department" name="department" required>
+        <select id="department" name="department" required>
+          <option value="">Select Department</option>
+          <option value="CSE">CSE</option>
+          <option value="ECE">ECE</option>
+          <option value="EEE">EEE</option>
+          <option value="Mech">Mech</option>
+        </select>
         <br><br>
+        
         <label for="mobile_no">Mobile No (+91):</label>
       <input type="text" id="mobile_no" name="mobile_no" maxlength="10" placeholder="Enter 10 digit phone number" required>
       <br><br>
 
-        <label for="password">Set Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br><br>
-
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required>
-        <br><br>
+      <label for="password">Set Password:</label>
+      <div style="display: flex; align-items: center;">
+        <input type="password" id="password" name="password" required style="flex-grow: 1;">
+        <i class="fa fa-eye" id="togglePassword" style="cursor: pointer; margin-left: 5px;"></i>
+      </div>
+      <br><br>
+      
+      <label for="confirmPassword">Confirm Password:</label>
+      <div style="display: flex; align-items: center;">
+        <input type="password" id="confirmPassword" name="confirmPassword" required style="flex-grow: 1;">
+        <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer; margin-left: 5px;"></i>
+      </div>
+      <br><br>
 
         <button type="submit">Create Profile</button>
       </div>
@@ -637,8 +665,12 @@ input:focus {
       <br><br>
 
       <label for="loginPassword">Password:</label>
-      <input type="password" id="loginPassword" name="loginPassword" required>
-      <p style="text-align: right; font-size: 12px; margin-top: -6px;">
+        <div style="display: flex; align-items: center;">
+            <input type="password" id="loginPassword" name="loginPassword" required style="flex-grow: 1;">
+            <i class="fa fa-eye" id="toggleLoginPassword" style="cursor: pointer; margin-left: 5px; margin-top: -15px;"></i>
+        </div>
+
+      <p style="text-align: right; font-size: 12px; margin-top: -2px;">
         <a href="./forgotPassword.html" id="forgotPasswordLink">Forgot/Change Password?</a>
       </p>
      
@@ -654,7 +686,10 @@ input:focus {
       <input type="text" id="adminUsername" name="adminUsername" required>
       <br><br>
       <label for="adminPassword">Password:</label>
-      <input type="password" id="adminPassword" name="adminPassword" required>
+      <div style="display: flex; align-items: center;">
+          <input type="password" id="adminPassword" name="adminPassword" required style="flex-grow: 1;">
+          <i class="fa fa-eye" id="toggleAdminPassword" style="cursor: pointer; margin-left: 5px; margin-top: -10px;"></i>
+      </div>
       <br><br>
       <button type="submit">Login</button>
     </form>
@@ -864,7 +899,7 @@ searchInput.addEventListener('input', () => {
       const fullName = document.getElementById('fullName').value.trim();
       const rollNumber = document.getElementById('rollNumber').value.trim();
       const email = document.getElementById('email').value.trim();
-      const department = document.getElementById('department').value.trim();
+      const department = document.getElementById('department').value;
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
       const mobileNumber = parseInt(document.getElementById('mobile_no').value);
@@ -981,6 +1016,46 @@ searchInput.addEventListener('input', () => {
         alert('An error occurred during Admin Login');
       }
     });
+    document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordField = document.getElementById('password');
+    togglePasswordVisibility(passwordField, this);
+  });
+
+  document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+    const confirmPasswordField = document.getElementById('confirmPassword');
+    togglePasswordVisibility(confirmPasswordField, this);
+  });
+
+  function togglePasswordVisibility(inputField, icon) {
+    if (inputField.type === "password") {
+      inputField.type = "text";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      inputField.type = "password";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    }
+  }
+  document.getElementById('toggleLoginPassword').addEventListener('click', function () {
+        const loginPasswordField = document.getElementById('loginPassword');
+        togglePasswordVisibility(loginPasswordField, this);
+    });
+    document.getElementById('toggleAdminPassword').addEventListener('click', function () {
+        const adminPasswordField = document.getElementById('adminPassword');
+        togglePasswordVisibility(adminPasswordField, this);
+    });
+    function togglePasswordVisibility(inputField, icon) {
+        if (inputField.type === "password") {
+            inputField.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            inputField.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
   </script>
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

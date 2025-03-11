@@ -300,7 +300,7 @@ viewRegisteredCourses.onclick = async function (e) {
           for (let i = 0; i < courseIds.length; i++) {
             const courseItem = document.createElement('li');
             courseItem.className = 'list-group-item';
-            courseItem.innerHTML = `<strong>${courseIds[i]}</strong> : ${courseNames[i]}`;  // Format as "1 : IT"
+            courseItem.innerHTML = `<strong>${courseNames[i]}</strong>`;  // Format as "1 : IT", <strong>${courseIds[i]}</strong> : 
             courseList.appendChild(courseItem);
           }
         });

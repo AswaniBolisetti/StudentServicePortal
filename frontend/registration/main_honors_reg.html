@@ -490,7 +490,7 @@ document.getElementById('honorsForm').addEventListener('submit', async (event) =
           for (let i = 0; i < courseIds.length; i++) {
             const courseItem = document.createElement('li');
             courseItem.className = 'list-group-item';
-            courseItem.innerHTML = `<strong>${courseIds[i]}</strong> : ${courseNames[i]}`;  // Format as "1 : IT"
+            courseItem.innerHTML = `<strong>${courseNames[i]}</strong>`;  // Format as "1 : IT"
             courseList.appendChild(courseItem);
           }
         });
