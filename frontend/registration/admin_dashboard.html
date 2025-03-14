@@ -252,7 +252,7 @@ table, th, td {
     background: linear-gradient(to right, rgb(1, 111, 16),rgb(10, 170, 42)); /* Darker shade on hover */
   }
   .styled-button5 {
-    background: #001f41;
+    background: #001285;
        color: white; /* White text */
     border: none;
     padding: 10px 20px;
@@ -282,7 +282,7 @@ table, th, td {
     background: linear-gradient(to right, rgb(97, 0, 52),rgb(168, 2, 145)); /* Darker shade on hover */
   }
   .styled-button7 {
-    background: #c40000;
+    background: #001285;
        color: white; /* White text */
     border: none;
     padding: 10px 20px;
@@ -293,9 +293,7 @@ table, th, td {
     transition: 0.3s ease-in-out;
   }
 
-  .styled-button7:hover {
-    background: linear-gradient(to right, rgb(59, 0, 12),rgb(245, 0, 78)); /* Darker shade on hover */
-  }
+ 
   .styled-button1, .styled-button2, .styled-button3, .styled-button4, .styled-button5, .styled-button6, .styled-button7 {
         /* Your default button styling */
         transition: 0.3s;
@@ -309,20 +307,136 @@ table, th, td {
 
         color: white;
     }
+    .styled-button7:hover {
+    background: red;
+ }
+    .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-left: 40px;
+        }
+
+        .dropdown-button {
+            background-color: #001285;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #001570;
+            min-width: 210px;
+            color: white;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            font-size: 17px;
+        }
+
+        .dropdown-content button {
+            width: 100%;
+            padding: 10px;
+            text-align: left;
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: block;
+            color: white;
+            font-size: 14px;
+        }
+
+        .dropdown-content button:hover {
+            background-color: #0026b1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .drop-container{
+            background-color: #001285;
+            padding: 5px;
+        }
+        
+.watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 40px;
+  color: rgba(29, 29, 29, 0.03);
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+}
+
+.watermark:nth-child(2) {
+  top: 30%; /* Shift upward */
+  left: 30%;
+}
+
+.watermark:nth-child(3) {
+  top: 70%; /* Shift downward */
+  left: 70%;
+}
     </style>
 </head>
 <body>
     <div class="header">
-        <h1 style="color: #001f41;">Admin Dashboard(SoET, SPMVV)</h1>
-        <div class="profile-menu">
+        <a href="admin_dashboard.html" style="text-decoration: none;">
+            <h1 style="color: #001f41; cursor: pointer;">Admin Dashboard (SoET, SPMVV)</h1>
+        </a>  <div class="profile-menu">
             <i class="fas fa-user-circle profile-icon" onclick="toggleDropdown()"></i>
             <div class="dropdown-menu" id="dropdownMenu">
                 <a href="javascript:void(0)" onclick="logout()">Logout</a>
             </div>
         </div>
     </div>
+    <div class="watermark">Honors Course Registration</div>
+    <div class="watermark">Honors Course Registration</div>
+    <div class="watermark">Honors Course Registration</div>
+<div class="drop-container">
+    <div class="dropdown">
+        <button class="dropdown-button" style="font-size: 17px; font-family: monospace;">
+            Add Details <i class="fa fa-angle-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <button onclick="showForm();">Add Courses</button>
+            <button onclick="showTrackForm()">Add TRACK Courses</button>
+            <button onclick="addCGPA()">Add CGPA Details</button>
+        <button onclick="showStudentUpload()">Add Student Details</button>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropdown-button" style="font-size: 17px; font-family: monospace;">
+            View Details <i class="fa fa-angle-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <button onclick="viewAddedCourses()">View Added Courses</button>
+            <button onclick="viewAddedTrackCourses()">View Added Track Courses</button>
 
-    <div class="button-container">
+            <button onclick="viewCGPA()">View CGPA Details</button>
+            <button onclick="viewStudentDetails()">View Student Details</button>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropdown-button" style="font-size: 17px; font-family: monospace;">
+            Drop Requests <i class="fa fa-angle-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <button onclick="viewStudentDropDetails()">Drop Requests</button>
+            <button onclick="viewDroppedStudentDetails()">View Dropped Students Details</button>  </div>
+    </div>
+
+ 
+    <button onclick="showStudentDetailsForm()" class="styled-button5" style="font-size: 17px; font-family: monospace;">View Registered Student Details</button>
+
+    <button onclick="viewDeleteStudentDataForm()" class="styled-button7" style="font-size: 17px; font-family: monospace;">Delete Student Data</button>
+</div>
+    <!-- <div class="button-container">
+     
         <button onclick="setActiveButton(this); showForm();" class="styled-button1">Add Course</button>
         <button onclick="setActiveButton(this); viewAddedCourses()" class="styled-button1">View Added Courses</button>
         <button onclick="setActiveButton(this); showTrackForm()" class="styled-button2">Add Track Course</button>
@@ -337,7 +451,7 @@ table, th, td {
         <button onclick="setActiveButton(this); viewDroppedStudentDetails()" class="styled-button6">View Dropped Students Details</button>
         <button onclick="setActiveButton(this); viewDeleteStudentDataForm()" class="styled-button7">Delete Student Data</button>
 
-    </div>
+    </div> -->
 
     <form id="trackCourseForm" style="display: none;" >
         <h2 style="margin: 0 auto; text-align: center; color: #0056b3;">ADD TRACK COURSE</h2>
@@ -549,7 +663,7 @@ table, th, td {
                     <th>Roll No</th>
                     <th>Name</th>
                     <th>CGPA</th>
-                    <th></th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -1178,8 +1292,7 @@ document.getElementById('addedTrackCourses').style.display = 'none';
                 <td>${student.username}</td>
                 <td>${student.Name}</td>
                 <td>${student.CGPA}</td>
-      <td> <button class="delete-cgpa-btn" data-cgpa-id="${student.username}">Delete</button> </td>
-           
+         
                 
             `;
         });
@@ -1514,7 +1627,8 @@ function downloadExcel() {
         link.href = url;
         link.download = `RegisteredStudents.xlsx`;
         link.click();
-       
+        // window.location.href = './admin_dashboard.html';
+         // Redirect to the admin dashboard
         
     } else {
         alert('No data available for download. Please fetch student details first.');
@@ -1635,5 +1749,6 @@ function toggleTrackDisplay() {
 }
 
 </script>
+
 </body>
 </html>
