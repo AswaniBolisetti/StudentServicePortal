@@ -1,12 +1,8 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 
 // Configure MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'aswanib',
-  database: 'honors_registration',
-});
+const db = require('../db'); 
 
 // Controller to insert course data into the courses table
 exports.insertCourse = async (req, res) => {

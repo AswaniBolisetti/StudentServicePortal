@@ -1,15 +1,11 @@
+require('dotenv').config();
 const multer = require('multer');
 const path = require('path');
 const XLSX = require('xlsx');
 const mysql = require('mysql2');
 
 // Configure MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'aswanib',
-  database: 'honors_registration',
-});
+const db = require('../db'); 
 
 // Configure multer for file uploads
 const upload = multer({

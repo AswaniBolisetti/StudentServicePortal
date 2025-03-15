@@ -1,13 +1,8 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 
 // Configure MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'aswanib',
-  database: 'honors_registration',
-});
-
+const db = require('../db'); 
 // Controller to delete a course from the courses table
 
 exports.deleteCourse = async (req, res) => {

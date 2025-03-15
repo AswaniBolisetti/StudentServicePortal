@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 const { OAuth2Client } = require('google-auth-library');
 
@@ -40,12 +41,7 @@ const verifyGoogleToken = async (token, emailFromRequest) => {
 
 
 // Configure MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',      // Your MySQL server address (e.g., localhost)
-  user: 'root',           // MySQL username
-  password: 'aswanib',    // MySQL password
-  database: 'honors_registration' // Your MySQL database name
-});
+const db = require('../db');
 
 const updatePassword = (email, password, callback) => {
   const updatePasswordQuery = 'UPDATE users SET password = ? WHERE email = ?';

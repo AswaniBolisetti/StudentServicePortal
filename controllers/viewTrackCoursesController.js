@@ -1,13 +1,10 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 
 // Configure MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',      // Your MySQL server address (e.g., localhost)
-  user: 'root',           // MySQL username
-  password: 'aswanib',    // MySQL password
-  database: 'honors_registration' // Your MySQL database name
-});
+const db = require('../db');
+
 
 // Controller to handle admin login
 exports.viewTrackCoursesController = (req, res) => {

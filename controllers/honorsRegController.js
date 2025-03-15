@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
@@ -5,12 +6,7 @@ const { OAuth2Client } = require('google-auth-library');
 const CLIENT_ID = '543677223710-im5qe7km6rtfp8mvk7fv48rtqv7gesgm.apps.googleusercontent.com'; // Replace with your actual Google Client ID
 const client = new OAuth2Client(CLIENT_ID);
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'aswanib',
-  database: 'honors_registration',
-});
+const db = require('../db');
 
 
 // Google token verification

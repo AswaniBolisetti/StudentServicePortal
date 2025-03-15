@@ -1,4 +1,5 @@
 // index.js
+require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
@@ -46,12 +47,7 @@ app.use(cors());
 app.use(express.json());
 // app.use(cors());
 // MySQL connection setup
-const db = mysql.createConnection({
-  host: 'localhost',      // Your MySQL server address (e.g., localhost)
-  user: 'root',           // MySQL username
-  password: 'aswanib', // MySQL password
-  database: 'honors_registration' // Your MySQL database name
-});
+const db = require('./db');
 
 // Connect to MySQL
 db.connect((err) => {
