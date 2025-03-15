@@ -15,6 +15,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
+            background-color: #001780;
+            color: white;
         }
         .profile-menu {
             position: relative;
@@ -386,7 +388,7 @@ table, th, td {
 <body>
     <div class="header">
         <a href="admin_dashboard.html" style="text-decoration: none;">
-            <h1 style="color: #001f41; cursor: pointer;">Admin Dashboard (SoET, SPMVV)</h1>
+            <h1 style="color: #ffffff; cursor: pointer;">Admin Dashboard (SoET, SPMVV)</h1>
         </a>  <div class="profile-menu">
             <i class="fas fa-user-circle profile-icon" onclick="toggleDropdown()"></i>
             <div class="dropdown-menu" id="dropdownMenu">
@@ -534,7 +536,7 @@ table, th, td {
         <div id="addedCourses">
             <h2 style="margin: 0 auto; text-align: center; color: #0056b3;">ADDED COURSES</h2>
         
-            <p>Added courses:
+            <p style="margin-left: 100px;">Added courses:
                 <select id="departmentFilter" style="font-size: medium;" onchange="filterCoursesByDepartment()">
                     <option value="">All Departments</option>
                     <option value="CSE">CSE</option>
@@ -565,7 +567,7 @@ table, th, td {
     <div id="addedTrackCourses" style="display: none;">
         <h2 style="margin: 0 auto; text-align: center; color: #0056b3;">ADDED TRACK COURSES</h2>
         
-        <p>Added Track courses:
+        <p style="margin-left: 130px;">Added Track courses:
             <select id="trackDepartmentFilter" style="font-size: medium;" onchange="filterTrackCoursesByDepartment()">
                 <option value="">All Departments</option>
                 <option value="CSE">CSE</option>
@@ -602,7 +604,7 @@ table, th, td {
         <label for="studentFile">Upload Student Excel File:</label>
         <input type="file" id="studentFile" style="font-size: medium;" name="studentFile" accept=".xlsx, .xls" required>
         <br><br>
-        <button type="button" id="uploadButton" onclick="uploadStudentFile()" style="font-size: 18px;">Upload</button>
+        <button type="button" id="uploadButton" onclick="uploadStudentFile()" style="font-size: 18px;padding: 10px; background-color: rgb(0, 0, 126); color: white; border-radius: 10px;">Upload</button>
     </form>
 
     <form id="CGPAUploadForm" style="display: none; padding: 2%;" enctype="multipart/form-data">
@@ -614,11 +616,12 @@ table, th, td {
         <label for="CGPAFile">Upload Students CGPA Excel File:</label>
         <input type="file" id="CGPAFile" style="font-size: medium;" name="CGPAFile" accept=".xlsx, .xls" required>
         <br><br>
-        <button type="button" id="uploadCGPAButton" onclick="uploadCGPAFile()" style="font-size: 18px;">Upload</button>
+        <button type="button" id="uploadCGPAButton" onclick="uploadCGPAFile()" style="font-size: 18px; padding: 10px; background-color: rgb(0, 0, 126); color: white; border-radius: 10px;">Upload</button>
     </form>
 
     <div id="studentDetails" style="display: none; margin-top: 20px;">
-        <p style="margin-left: 20px; font-size: 20px;">Student Details:</p>
+        <!-- <h2 style="margin: 0 auto;">Added Student Details</h2> -->
+        <p style="margin-left: 130px; font-size: 18px;">Student Details:</p>
         <table id="studentsTable">
             <thead>
                 <tr>
@@ -635,7 +638,7 @@ table, th, td {
     <div id="studentDropDetails" style="display: none; margin-top: 20px;">
         <h2 style="margin: 0 auto; text-align: center; color: #0056b3;">DROP REQUESTS</h2>
         
-        <p style="margin-left: 20px; font-size: 20px;">Student Drop Request Details:</p>
+        <p style="margin-left: 130px; font-size: 17px;">Student Drop Request Details:</p>
         <table id="studentsDropTable">
             <thead>
                 <tr>
@@ -656,7 +659,7 @@ table, th, td {
     <div id="CGPADetails" style="display: none; margin-top: 20px;">
         <h2 style="margin: 0 auto; text-align: center; color: #0056b3;">VIEW STUDENT CGPA DETAILS</h2>
       
-        <p style="font-size: 20px; align-items: center; margin-left: 20px;">CGPA Details:</p>
+        <p style="font-size: 18px; align-items: center; margin-left: 130px;">CGPA Details:</p>
         <table id="CGPATable">
             <thead>
                 <tr>
@@ -672,7 +675,7 @@ table, th, td {
         </table>
     </div>
 
-    <div id="DroppedStudentsDetailsForm" style="display: none; margin: 0 auto; margin-top: -10px; max-width: 500px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div id="DroppedStudentsDetailsForm" style="display: none; margin: 0 auto; margin-top: 40px; border: 0.5px solid black; border-radius: 10px; box-shadow: 20px 20px grey; max-width: 500px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
         <form style="display: flex; flex-direction: column; gap: 15px;">
             <h2 style="margin: 0 auto; text-align: center; color: #0056b3;">VIEW DROPPED STUDENT DATA</h2>
         
@@ -722,7 +725,7 @@ table, th, td {
     </div>
 
     
-    <div id="studentDetailsForm" style="display: none; margin: 0 auto; margin-top: -10px; max-width: 500px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div id="studentDetailsForm" style="display: none; margin: 0 auto; margin-top: 40px; max-width: 500px; border: 0.5px solid black; border-radius: 10px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
         <form style="display: flex; flex-direction: column; gap: 15px;">
             <h2 style="margin: 0 auto; text-align: center; color: #0056b3;">VIEW REGISTRATION DETAILS</h2>
         
@@ -780,7 +783,7 @@ table, th, td {
     </div>
     
 
-    <div id="deleteStudentDetailsForm" style="display: none; margin: 0 auto; margin-top: -10px; max-width: 500px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div id="deleteStudentDetailsForm" style="display: none; margin: 0 auto; margin-top: 40px; border: 0.5px solid black; border-radius: 10px; max-width: 500px; padding: 20px; background-color: #f9f9f9;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
         <form style="display: flex; flex-direction: column; gap: 15px;">
             <h2 style="margin: 0 auto; text-align: center; color: #0056b3;">DELETE STUDENT DATA</h2>
         
@@ -1330,21 +1333,21 @@ document.getElementById('addedTrackCourses').style.display = 'none';
 }
 
 async function DeleteStudentData() {
+    const confirmation = confirm("The data will be deleted permanently. Are you sure you want to delete?");
+    if (!confirmation) return;
 
     const passout_year = document.getElementById('viewRegisteredYearDelete').value;
     const department = document.getElementById('viewDepartmentDelete').value;
-    
+
     try {
         const response = await axios.post('http://localhost:3000/deletestudentdataall', {
-                    passout_year,
-                    department
-                });
+            passout_year,
+            department
+        });
         if (response.status === 200) {
-             alert('Student data has been deleted!');
-            // Refresh the course list
+            alert('Student data has been deleted!');
             window.location.href = './admin_dashboard.html';
-                        }
-
+        }
     } catch (error) {
         alert('Error in deleting student data or details not found. Please try again.');
         console.error(error);

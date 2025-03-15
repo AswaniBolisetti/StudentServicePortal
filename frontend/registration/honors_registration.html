@@ -125,6 +125,29 @@
   .close:hover {
     color: #ff0000;
   }
+  
+.watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 40px;
+  color: rgba(37, 37, 37, 0.03);
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+}
+
+.watermark:nth-child(2) {
+  top: 30%; /* Shift upward */
+  left: 30%;
+}
+
+.watermark:nth-child(3) {
+  top: 70%; /* Shift downward */
+  left: 70%;
+}
   </style>
 </head>
 
@@ -142,7 +165,9 @@
       </div>
     </div>
   </div>
-  
+  <div class="watermark">Honors Course Registration</div>
+  <div class="watermark">Honors Course Registration</div>
+  <div class="watermark">Honors Course Registration</div>
 
   <div class="card">
     <h1>Honors Registration</h1>

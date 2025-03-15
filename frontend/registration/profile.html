@@ -141,9 +141,35 @@
   .back-to-home:hover {
     background-color: #0056b3; /* Darker blue on hover */
   }
+  
+.watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 40px;
+  color: rgba(37, 37, 37, 0.03);
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+}
+
+.watermark:nth-child(2) {
+  top: 30%; /* Shift upward */
+  left: 30%;
+}
+
+.watermark:nth-child(3) {
+  top: 70%; /* Shift downward */
+  left: 70%;
+}
   </style>
 </head>
 <body>
+  <div class="watermark">Honors Course Registration</div>
+  <div class="watermark">Honors Course Registration</div>
+  <div class="watermark">Honors Course Registration</div>
   <div class="top-right-button">
     <div class="profile-dropdown">
       <i class="fas fa-user-circle fa-2x" id="profileIcon"></i>
