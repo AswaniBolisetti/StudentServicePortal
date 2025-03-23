@@ -18,7 +18,7 @@
 
     .top-right-button {
       position: absolute;
-      top: 20px;
+      top: 195px;
       right: 20px;
     }
 
@@ -172,6 +172,31 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+.accreditation {
+    display: flex;
+    justify-content: center;
+    gap: 320px; /* Space between the two items */
+  }
+  @media (width: 1648px) and (height: 800px)  {
+  /* Your styles here */
+  .spmvv-logo-left{
+    margin-left: 200px;
+  }
+  .spmvv-logo-right{
+    margin-right: 200px;
+  }
+  .container{
+    width: 90%;
+    max-width: 500px;
+    /* background: #ffffff; */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2.5%;
+  }
+
+}
 .watermark {
   position: fixed;
   top: 50%;
@@ -195,13 +220,144 @@
   left: 70%;
 }
 
+.spmvv-telugu{
+  font-size: 13px;
+}
+.main-heading{
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
+   padding: 10px;
+    margin-bottom: -20px;
+    margin-top: -20px;
+}
+.spmvv-english{
+  font-size: 20px; color: #001223;
+}
+.soet-name{
+  font-size: 27px;
+   color: #002346;
+    margin-bottom: 4px;   
+    letter-spacing: 2px;
+}
+.womens-univ{
+  margin-top: -12px;
+   font-size: 13px;
+}
+.tirupati-heading{
+  margin-top: -6px;
+   font-size: 13px;
+}
+.spmvv-logo-mobile{
+  display: none;
+  height: 120px;
+ 
+}
+
+@media screen and (max-width: 500px) {
+  
+  .spmvv-logo-left,
+  .spmvv-logo-right,
+  .accr {
+    display: none;
+  }
+
+  /* 🔄 Centering Text Content */
+  .spmvv-telugu,
+  .soet-name,
+  .spmvv-english,
+  .womens-univ,
+  .tirupati-heading {
+    font-size: 15px; /* Adjust based on content */
+    text-align: center;
+    margin: 0; /* Removes left margins */
+  }
+  .spmvv-logo-mobile{
+  display: block;
+  align-items: center;
+  margin: 0 auto;
+  height: 80px;
+}
+.main-heading{
+  margin-top: -3px;
+}
+  .soet-name {
+    font-size: 14.5px;
+    letter-spacing: 0;
+  }
+
+  .spmvv-english,
+  .womens-univ,
+  .tirupati-heading {
+    font-size: 14px;
+  }
+
+  .womens-univ,
+  .tirupati-heading {
+    font-size: 12px;
+  }
+
+  /* 🌟 Optional: Use Flexbox for Full Control */
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top-right-button {
+      position: absolute;
+      top: 235px;
+      right: 20px;
+    }
+    .spmvv-logo-mobile{
+  margin-top: -10px;
+}
+}
+
+
+@media screen and (max-width: 500px) {
+  header {
+    justify-content: center;
+  }
+
+  header button {
+    width: auto;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
   </style>
 </head>
 
-<body>
+<body><img src="./logo-left.png" alt="SPMVV LOGO"  class="spmvv-logo-mobile">
+    
   <div class="watermark">Honors Course Registration</div>
   <div class="watermark">Honors Course Registration</div>
   <div class="watermark">Honors Course Registration</div>
+
+  <heading class="main-heading">
+    <img src="./logo-left.png" alt="SPMVV LOGO" style="height: 130px;" class="spmvv-logo-left">
+    
+    <div style="text-align: center;" >
+      <p style="margin-bottom: 2px;" class="spmvv-telugu">శ్రీ పద్మావతి మహిళా విశ్వవిద్యాలయం</p>
+      <h1 class="soet-name"><b>SCHOOL OF ENGINEERING AND TECHNOLOGY</b></h1>
+      <h1 class="spmvv-english"><b>SRI PADMAVATI MAHILA VISVAVIDYALAYAM</b></h1>
+
+      <h6 class="womens-univ">(Women's University)</h6>
+      <h6 class="tirupati-heading">Tirupati, Andhra Pradesh-517502, India</h6>
+      <div class="accreditation">
+        <h6 style="font-size: 14px;" class="accr">Accredited with <b style="color: rgb(229, 0, 0);">"A+"</b> Grade by NAAC</h6>
+        <h6 style="font-size: 14px;" class="accr">ISO 21001 : 2018 Certified</h6>
+      </div>
+    </div>
+  
+    <img src="./logo_right.jpg" alt="Azadi ka amrit mahotsav" style="height: 100px;" class="spmvv-logo-right">
+  </heading>
+  
+<hr style="border: 0.5px solid black; width: 115%; margin-left: -30px;">
+
   <div class="top-right-button"  style="margin-top: -8px; margin-bottom: 20px;">
     <div class="profile-dropdown">
       <i class="fas fa-user-circle fa-2x" id="profileIcon"></i>

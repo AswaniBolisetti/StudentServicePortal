@@ -22,7 +22,10 @@ background-color: white;
     padding: 0;
     font-family: 'Arial', sans-serif;
     /* background-color: #f4f4f9; */
-   
+    /* background-image: url(./SOET-FULL.jpeg);
+   background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; */
    
   }
 
@@ -332,7 +335,7 @@ input:focus {
       max-width: 200px;
       margin-left: 20px;
       padding: 10px 20px;
-      background-color: #4CAF50;
+      background-color: #073763;
       color: white;
       border: none;
       border-radius: 5px;
@@ -340,13 +343,41 @@ input:focus {
     }
 
     #openModal:hover {
-      background-color: #45a049;
+      background-color: #062f54;
+    }
+    #soet-link {
+      max-width: 200px;
+      margin-left: 20px;
+      padding: 10px 20px;
+      background-color: #073763;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #soet-link:hover {
+      background-color: #073763;
+    }
+    #spmvv-link {
+      max-width: 200px;
+      margin-left: 20px;
+      padding: 10px 20px;
+      background-color: #073763;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #spmvv-link:hover {
+      background-color: #073763;
     }
     #openSchemeModal {
       max-width: 200px;
       margin-left: 20px;
       padding: 10px 20px;
-      background-color: #4CAF50;
+      background-color: #073763;
       color: white;
       border: none;
       border-radius: 5px;
@@ -354,7 +385,7 @@ input:focus {
     }
 
     #openSchemeModal:hover {
-      background-color: #45a049;
+      background-color: #073763;
     }
 
     /* Responsive Modal */
@@ -397,6 +428,7 @@ input:focus {
 .spmvv-logo-mobile{
   display: none;
   height: 130px;
+  
 }
 @media screen and (max-width: 500px) {
   .spmvv-logo-left,
@@ -420,6 +452,7 @@ input:focus {
   align-items: center;
   margin: 0 auto;
   height: 80px;
+  margin-top: 10px;
 }
   .soet-name {
     font-size: 15.5px;
@@ -474,8 +507,49 @@ input:focus {
 
 #schemeLink a:hover {
   text-decoration: underline;
-}
+}.button-container2 {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 
+  button {
+    flex: 1;
+    min-width: max-content;
+    padding: 10px;
+  }
+
+  @media (max-width: 500px) {
+    .button-container {
+      flex-wrap: nowrap;
+    }
+  }
+#studentLoginButton:hover {
+  background-color: #13314e;
+}
+.marquee-container {
+  margin-top: -16px;
+  margin-bottom: -6px;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background: #ffffff;
+            padding: 5px 0;
+        }
+        .marquee-text {
+            display: inline-block;
+            animation: marquee 12s linear infinite;
+            font-size: 21px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #000454, #0492b9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+        }
+        @keyframes marquee {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
   </style>
 </head>
 
@@ -487,7 +561,7 @@ input:focus {
   <div class="watermark">Honors Course Registration</div>
 
   <heading class="main-heading" style="">
-    <img src="./logo-left.png" alt="SPMVV LOGO" style="height: 130px;" class="spmvv-logo-left">
+    <img src="./logo-left.png" alt="SPMVV LOGO" style="height: 130px; margin-left: 17px;" class="spmvv-logo-left">
     
     <div style="text-align: center;" >
       <p style="margin-bottom: 2px;" class="spmvv-telugu">శ్రీ పద్మావతి మహిళా విశ్వవిద్యాలయం</p>
@@ -506,11 +580,19 @@ input:focus {
   </heading>
   
 <hr style="border: 0.5px solid black; width: 100%;">
-
+<!-- <div style="background-image: url(./SOET-FULL.jpeg);"></div> -->
 <!-- Modal Trigger Button -->
+<div class="marquee-container">
+  <span class="marquee-text">Welcome to the Future of Academic Excellence – Apply for Honors!</span>
+</div>
  <header>
+  <div class="button-container2">
+  <button onclick="window.open('https://www.spmvv.ac.in/', '_blank')" id="spmvv-link">SPMVV Home Page</button>
+<button onclick="window.open('https://www.spmvv.ac.in/school-of-engineering-technology/home/', '_blank')" id="soet-link">SoET Home Page</button>
+
 <button id="openModal">View Eligible List</button>
 <button id="openSchemeModal">View Scheme</button>
+</div>
 </header>
 <!-- Modal -->
 <div id="myModal" class="modal">
@@ -559,14 +641,14 @@ input:focus {
 </div>
 
 <br>
-  <div class="container" style="border: 1.5px solid black;">
-  <h1 style="font-size: 15px;"><b>Welcome to Student Service Portal</b></h1>
+  <div class="container" style="border: 1.5px solid black; margin-bottom: 20px;">
+  <h1 style="font-size: 19px;"><b>Welcome to Student Service Portal</b></h1>
   
   <div class="button-container">
   <!-- Buttons to toggle between Create Profile and Login -->
-  <button id="studentLoginButton">Student</button>
+  <button id="studentLoginButton" style="background-color: #4a8ecc; font-size: 15px;">Student</button>
   <div class="vertical-line"></div>
-  <button id="adminLoginButton">Admin</button>
+  <button id="adminLoginButton" style="background-color: #4a8ecc; font-size: 15px;">Admin</button>
 </div>
 
 
@@ -576,9 +658,9 @@ input:focus {
   <!-- Student Options Buttons -->
 <div id="studentOptions" style="display: none;">
   <div class="button-container">
-    <button id="createProfileButton">Sign Up</button>
+    <button id="createProfileButton" style="background-color: #4a8ecc;">Sign Up</button>
     <div class="vertical-line"></div>
-    <button id="loginButton">Sign In</button>
+    <button id="loginButton" style="background-color: #4a8ecc;">Sign In</button>
   </div>
 </div>
 
