@@ -12,6 +12,8 @@ The **Honors Course Registration Portal** is a web-based application that allows
 - Secure authentication using `.env` for database credentials
 - Responsive UI with Bootstrap
 
+## Images
+![Login Page](Images/dashboard.jpg)
 ## Technologies Used
 
 - **Backend:** Node.js, Express.js
