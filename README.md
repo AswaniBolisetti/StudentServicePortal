@@ -13,7 +13,24 @@ The **Honors Course Registration Portal** is a web-based application that allows
 - Responsive UI with Bootstrap
 
 ## Images
-![Login Page](Images/dashboard.jpg)
+| Home Page | Student Signup |
+|------------|----------------|
+| ![Home Pade](Images/dashboard.jpg) | ![Student Signup](Images/student_signup.jpg) |
+
+| Student Dashboard | Honors Registration Form|
+|-----------------|------------|
+| ![Admin](Images/student_dashboard.jpg) | ![Honors Form](Images/honors_form.jpg) |
+
+| Student Dashboard | Student Profile |
+|-----------------|---------------------|
+| ![Profile](Images/student_dashboard2.jpg) | ![Success](Images/student_profile.jpg) |
+
+| Admin 1 | Admin 2 |
+|--------------------|--------------|
+| ![Dashboard](Images/admin1.jpg) | ![Settings](Images/admin2.jpg) |
+
+![Registration Details View Page](Images/student2.jpg)
+
 ## Technologies Used
 
 - **Backend:** Node.js, Express.js
